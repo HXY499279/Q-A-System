@@ -1,0 +1,23 @@
+.question-msg {
+  margin: 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+.question-msg .question-msg-search {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 10px 30px;
+  background-color: #D2F1E3;
+  border-radius: 8px;
+}
+.question-msg .question-msg-search ul {
+  display: flex;
+  justify-content: space-between;
+}
+.question-msg .question-msg-search ul li {
+  margin-right: 40px;
+}
+.question-msg .question-msg-content {
+  margin: 10px;
+}

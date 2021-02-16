@@ -1,0 +1,21 @@
+.echart {
+  width: 100%;
+  padding: 0px 30px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.echart .echart1 {
+  width: 49%;
+}
+.echart .echart1 .echart-content1 {
+  height: 360px;
+  background-color: white;
+}
+.echart .echart2 {
+  width: 49%;
+}
+.echart .echart2 .echart-content2 {
+  height: 360px;
+  background-color: white;
+}
