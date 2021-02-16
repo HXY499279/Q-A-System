@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Link} from 'react-router-dom'
 
 import AdminTopbar from "../../../components/admin-topbar"
 
@@ -161,12 +162,11 @@ export default class Question extends Component {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
       }
-      
     onOk = (value) => {
         console.log('onOk: ', value);
       }
 
-      //?状态回调函数
+    //?状态回调函数
     handleChange = (value) => {
         console.log(`selected ${value}`);
       }
@@ -177,7 +177,6 @@ export default class Question extends Component {
         console.log(e)
         console.log('我点击了提问者')
     }
-    //?点击提者
     handleProfile = () => {
         this.setState({profileIsModalVisible:false})
     }
@@ -196,6 +195,12 @@ export default class Question extends Component {
     }
     cancelEdit = () => {
         this.setState({editIsModalVisible:false})
+    }
+
+    //?跳转问题详情页
+    goQuestionDetail = (e) => {
+        console.log(e)
+        
     }
 
     
@@ -255,7 +260,7 @@ export default class Question extends Component {
               {
                 title: '操作',
                 dataIndex: '',
-                render: (question) => (<><a>查看</a> <a onClick={(e) => this.showEditQuesion(e)}>修改</a> <a>隐藏</a></>),
+                render: (question) => (<><Link to="/admin/questionDetail" onClick={(e) => this.goQuestionDetail(e)}>查看</Link><a onClick={(e) => this.showEditQuesion(e)}>修改</a> <a>隐藏</a></>),
                 align: 'center'
               }
           ]

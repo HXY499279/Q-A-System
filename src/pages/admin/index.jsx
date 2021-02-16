@@ -10,6 +10,7 @@ import LeftNav from "../../components/left-nav";
 
 import Home from './home'
 import Question from './question'
+import QuestionDetail from './question/question-detail'
 import Message from './meaasge'
 import Subject from  './subject'
 import Interface from './interface'
@@ -29,6 +30,7 @@ export default class Admin extends Component {
                 <Switch>
                   <Route path="/admin/home" component={Home}></Route>
                   <Route path="/admin/question" component={Question}></Route>
+                  <Route path="/admin/questionDetail" component={QuestionDetail}></Route>
                   <Route path="/admin/message" component={Message}></Route>
                   <Route path="/admin/subject" component={Subject}></Route>
                   <Route path="/admin/interface" component={Interface}></Route>

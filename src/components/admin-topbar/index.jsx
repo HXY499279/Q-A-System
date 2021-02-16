@@ -19,7 +19,7 @@ export default class AdminTopbar extends Component {
                     <div className="time-pick" style={{display: this.props.timeShow === "true" ? "block" : "none"}}>
                         <span>时间段：</span>
                         <RangePicker
-                            style={{width:"60%"}}
+                            style={{width:"70%"}}
                                 showTime={{ format: 'HH:mm' }}
                                 format="YYYY-MM-DD HH:mm"
                                 onChange={this.onChange}
