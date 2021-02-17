@@ -1,0 +1,27 @@
+.msg-detail {
+  margin: 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+.msg-detail h1 {
+  padding: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.msg-detail hr {
+  height: 2px;
+  border: none;
+  border-top: 2px dotted #30CB88;
+}
+.msg-detail .msg-profile {
+  padding: 10px 20px 20px;
+}
+.msg-detail .msg-profile .msg-profile-ul {
+  margin-top: -20px;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: row;
+}
+.msg-detail .msg-profile .msg-profile-ul li {
+  margin-left: 15px;
+}

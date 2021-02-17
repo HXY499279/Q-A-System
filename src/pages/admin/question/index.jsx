@@ -297,8 +297,6 @@ export default class Question extends Component {
                             导出
                         </Button>
                     </div>
-                   
-
                 </div>
                 <div className="question-msg-content">
                 <Table 

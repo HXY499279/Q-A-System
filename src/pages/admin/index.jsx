@@ -11,12 +11,13 @@ import LeftNav from "../../components/left-nav";
 import Home from './home'
 import Question from './question'
 import QuestionDetail from './question/question-detail'
-import Message from './meaasge'
+import Message from './message'
 import Subject from  './subject'
 import Interface from './interface'
 import User from './user'
 import Feedback from './feedback'
 import Monitor from './monitor'
+import MessageDetail from './message/message-detail';
 const {  Footer, Sider, Content } = Layout;
 
 export default class Admin extends Component {
@@ -32,6 +33,7 @@ export default class Admin extends Component {
                   <Route path="/admin/question" component={Question}></Route>
                   <Route path="/admin/questionDetail" component={QuestionDetail}></Route>
                   <Route path="/admin/message" component={Message}></Route>
+                  <Route path="/admin/messageDetail" component={MessageDetail}></Route>
                   <Route path="/admin/subject" component={Subject}></Route>
                   <Route path="/admin/interface" component={Interface}></Route>
                   <Route path="/admin/user" component={User}></Route>
