@@ -80,6 +80,7 @@ export default class Score extends Component {
                         </ul>    
                     </div>
                     <Table 
+                    style={{padding:'20px'}}
                     bordered
                     align="center"
                     pagination={{ pageSize: 10 }} 

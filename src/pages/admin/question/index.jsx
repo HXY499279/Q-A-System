@@ -260,7 +260,7 @@ export default class Question extends Component {
               {
                 title: '操作',
                 dataIndex: '',
-                render: (question) => (<><Link to="/admin/questionDetail" onClick={(e) => this.goQuestionDetail(e)}>查看</Link><a onClick={(e) => this.showEditQuesion(e)}>修改</a> <a>隐藏</a></>),
+                render: (e) => (<><Link to="/admin/questionDetail" onClick={(e) => this.goQuestionDetail(e)}>查看</Link><a onClick={(e) => this.showEditQuesion(e)}>修改</a> <a>隐藏</a></>),
                 align: 'center'
               }
           ]

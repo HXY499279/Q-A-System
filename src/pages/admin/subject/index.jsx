@@ -105,13 +105,13 @@ export default class Subject extends Component {
                     </ul>    
                 </div>
                 <div className="subject-search-list">
-                <Table 
-                bordered
-                align="center"
-                pagination={{ pageSize: 10 }} 
-                dataSource={this.state.subjectDataSource}
-                columns={subjectColumns} 
-                rowKey="index"/>
+                  <Table 
+                  bordered
+                  align="center"
+                  pagination={{ pageSize: 10 }} 
+                  dataSource={this.state.subjectDataSource}
+                  columns={subjectColumns} 
+                  rowKey="index"/>
                 </div>
                 <Modal title="修改学科" visible={subjectIsModalVisible} onOk={this.handleEdit} onCancel={this.cancelEdit}>
                     <EditSubject/>
