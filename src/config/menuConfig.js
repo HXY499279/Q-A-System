@@ -30,9 +30,19 @@ const menuList = [
         route: '/admin/user'
     },
     {
-        title: '小程序反馈',
+        title: '举报反馈',
         icon: 'icon-fankui',
         route: '/admin/feedback'
+    },
+    {
+        title: '网站日志',
+        icon: 'icon-user1',
+        route: '/admin/log'
+    },
+    {
+        title: '积分管理',
+        icon: 'icon-user1',
+        route: '/admin/score'
     },
     {
         title: '小程序监测',

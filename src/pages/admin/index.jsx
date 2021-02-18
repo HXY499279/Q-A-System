@@ -16,6 +16,8 @@ import Subject from  './subject'
 import Interface from './interface'
 import User from './user'
 import Feedback from './feedback'
+import Log from './the-log'
+import Score from './score'
 import Monitor from './monitor'
 import MessageDetail from './message/message-detail';
 const {  Footer, Sider, Content } = Layout;
@@ -38,6 +40,8 @@ export default class Admin extends Component {
                   <Route path="/admin/interface" component={Interface}></Route>
                   <Route path="/admin/user" component={User}></Route>
                   <Route path="/admin/feedback" component={Feedback}></Route>
+                  <Route path="/admin/log" component={Log}></Route>
+                  <Route path="/admin/score" component={Score}></Route>
                   <Route path="/admin/monitor" component={Monitor}></Route>
                   <Redirect to="/admin/home"></Redirect>
                 </Switch>                
