@@ -50,9 +50,7 @@ export default class SumCard extends Component {
                             </Card.Grid>
                         )
                     })
-
                 }
-               
             </Fragment>
         )
     }
