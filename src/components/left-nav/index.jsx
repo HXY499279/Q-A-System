@@ -11,7 +11,7 @@ import menuList from '../../config/menuConfig'
 //? 在 antd 中使用阿里图标
 import { createFromIconfontCN } from '@ant-design/icons';
 const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_2372127_68g0lwlpz9k.js',
+    scriptUrl: '//at.alicdn.com/t/font_2372127_cicuaidwmxq.js',
   });
 
 

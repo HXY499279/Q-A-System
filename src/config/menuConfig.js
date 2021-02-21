@@ -36,12 +36,12 @@ const menuList = [
     },
     {
         title: '网站日志',
-        icon: 'icon-user1',
+        icon: 'icon-rizhi',
         route: '/admin/log'
     },
     {
         title: '积分管理',
-        icon: 'icon-user1',
+        icon: 'icon-jifen1',
         route: '/admin/score'
     },
     {

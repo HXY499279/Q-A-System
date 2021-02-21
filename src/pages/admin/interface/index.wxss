@@ -1,0 +1,38 @@
+.interface-msg {
+  margin: 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+.interface-msg .img-content {
+  padding: 30px;
+}
+.interface-msg .img-content .img-content-part1,
+.interface-msg .img-content .img-content-part2 {
+  display: flex;
+  justify-content: start;
+}
+.interface-msg .img-content .img-content-part1 > :first-child,
+.interface-msg .img-content .img-content-part2 > :first-child {
+  margin-right: 100px;
+}
+.interface-msg .img-content .img-content-part1 > :last-child,
+.interface-msg .img-content .img-content-part2 > :last-child {
+  margin-left: 100px;
+}
+.interface-msg .img-content .title {
+  font-size: 18px;
+  font-weight: 400;
+  color: #30CB88;
+  margin: 10px 0px;
+}
+.interface-msg .img-content .logo {
+  display: flex;
+  justify-content: start;
+}
+.interface-msg .img-content .logo li {
+  margin-right: 20px;
+  width: 100%;
+}
+.interface-msg .img-content .logo li div {
+  text-align: center;
+}

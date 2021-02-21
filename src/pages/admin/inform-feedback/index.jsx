@@ -5,6 +5,8 @@ import { Table, Modal, Input, Button, Select, DatePicker} from 'antd';
 
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
 import './index.less'
+import FeedbackContent from './feedback-content'
+import InformContent from './inform-content'
 export default class Feedback extends Component {
     state = {
         informIsModalVisible: false,
@@ -104,7 +106,7 @@ export default class Feedback extends Component {
               {
                 title: '操作',
                 dataIndex: '',
-                render: (e) => (<><a onClick={(e) => this.showInform(e)}>查看</a><a>警告</a> <a>隐藏</a></>),
+                render: (e) => (<><a onClick={(e) => this.showInform(e)}>查看 </a><a> 警告 </a><a> 隐藏</a></>),
                 align: 'center'
               }
           ]
@@ -142,7 +144,7 @@ export default class Feedback extends Component {
               {
                 title: '操作',
                 dataIndex: '',
-                render: (e) => (<><a onClick={(e) => this.showFeedback(e)}>查看</a><a>解决</a><a>隐藏</a></>),
+                render: (e) => (<><a onClick={(e) => this.showFeedback(e)}>查看 </a><a> 解决 </a><a> 隐藏</a></>),
                 align: 'center'
               }
         ]
@@ -184,8 +186,8 @@ export default class Feedback extends Component {
                     columns={informColumns} 
                     rowKey="index"/>
                     </div>
-                    <Modal title="举报详情" visible={informIsModalVisible} onOk={this.handleinform} onCancel={this.cancelinform}>
-                        scx
+                    <Modal title="举报详情" visible={informIsModalVisible} onOk={this.handleInform} onCancel={this.cancelInform}>
+                        <InformContent/>
                     </Modal>
                  </div>
                  <div className="feedback-infrom-msg">
@@ -222,7 +224,7 @@ export default class Feedback extends Component {
                     rowKey="index"/>
                     </div>
                     <Modal title="反馈详情" visible={feedbackIsModalVisible} onOk={this.handleFeedback} onCancel={this.cancelFeedback}>
-                        反馈详情
+                        <FeedbackContent/>
                     </Modal>
                     </div>
                 

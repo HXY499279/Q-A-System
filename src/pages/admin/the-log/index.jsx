@@ -11,7 +11,7 @@ export default class Log extends Component {
         logDataSource:[
             {
                 index: '01',
-                role: '管理员',
+                account: 'tyh',
                 action: '删除',
                 actionContent: '提问：怎么能够不无聊',
                 time: '2021-02-18 16:00',
@@ -19,7 +19,7 @@ export default class Log extends Component {
             },
             {
                 index: '02',
-                role: '管理员',
+                account: 'aqiuya',
                 action: '删除',
                 actionContent: '提问：怎么能够过科二',
                 time: '2021-02-18 16:00',
@@ -56,8 +56,8 @@ export default class Log extends Component {
                 align: 'center'
               },
             {
-                title: '角色',
-                dataIndex: 'role',
+                title: '账户',
+                dataIndex: 'account',
                 align: 'center'
               },
               {
