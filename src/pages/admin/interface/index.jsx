@@ -32,23 +32,6 @@ export default class Interface extends Component {
                             <div className="title">成长总积分背景图：</div>
                             <UploadImg num='1'/>
                         </div>
-                        <div>
-                            <div className="title">排行榜冠亚季军logo：</div>
-                            <ul className="logo">
-                                <li>
-                                    <UploadImg num='1'/>
-                                    <div>冠军</div>
-                                </li>
-                                <li>
-                                    <UploadImg num='1'/>
-                                    <div>亚军</div>
-                                </li>
-                                <li>
-                                    <UploadImg num='1'/>
-                                    <div>季军</div>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                </div>
             </div>
