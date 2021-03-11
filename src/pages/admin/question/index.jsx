@@ -260,7 +260,7 @@ export default class Question extends Component {
               {
                 title: '操作',
                 dataIndex: '',
-                render: (e) => (<><Link to="/admin/questionDetail" onClick={(e) => this.goQuestionDetail(e)}>查看</Link><a onClick={(e) => this.showEditQuesion(e)}>修改</a> <a>隐藏</a></>),
+                render: (e) => (<><Link to="/admin/questionDetail" onClick={(e) => this.goQuestionDetail(e)}> 查看 </Link><a onClick={(e) => this.showEditQuesion(e)}> 修改 </a> <a> 隐藏 </a></>),
                 align: 'center'
               }
           ]
@@ -272,10 +272,10 @@ export default class Question extends Component {
                 <div className="question-msg-search">
                     <div>
                         <ul>
-                            <li>标题：<Input style={{width:180}}/></li>
-                            <li>学科：<Input style={{width:180}}/></li>
-                            <li>学院：<Input style={{width:180}}/></li>
-                            <li>提问者：<Input style={{width:180}}/></li>
+                            <li>标题：<Input style={{width:160}}/></li>
+                            <li>学科：<Input style={{width:160}}/></li>
+                            <li>学院：<Input style={{width:160}}/></li>
+                            <li>提问者：<Input style={{width:160}}/></li>
                         </ul>
                         <ul>
                             <li>状态： <Select  style={{ width: 180 }} onChange={this.handleChange}>
@@ -292,10 +292,13 @@ export default class Question extends Component {
                             <Button type="primary" icon={<SearchOutlined />}>
                                 搜索
                             </Button>
+                            
                         </ul>
-                        <Button type="primary" icon={<DownloadOutlined />}>
-                            导出
-                        </Button>
+                        <ul>
+                            <Button type="primary" icon={<DownloadOutlined />}>
+                                导出
+                            </Button>
+                        </ul>
                     </div>
                 </div>
                 <div className="question-msg-content">

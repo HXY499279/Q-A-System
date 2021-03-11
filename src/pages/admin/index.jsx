@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {Redirect, Route, Switch} from 'react-router-dom'
 
 import { Layout } from 'antd';
+import './index.less'
 
 
 import Header from "../../components/header";
@@ -29,7 +30,7 @@ export default class Admin extends Component {
             <Header/>
             <Layout>
               <Sider style={{backgroundColor: 'white'}} width="180"><LeftNav/></Sider>
-              <Content>
+              <Content style={{minHeight:"100vh"}}>
                 <Switch>
                   <Route path="/admin/home" component={Home}></Route>
                   <Route path="/admin/question" component={Question}></Route>

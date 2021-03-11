@@ -49,5 +49,9 @@
     ]
   },
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^5.1.2",
+    "npm": "^7.6.2"
+  }
 }

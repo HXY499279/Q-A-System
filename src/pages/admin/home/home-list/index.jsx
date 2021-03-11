@@ -65,6 +65,38 @@ export default class HomeList extends Component {
                 answerNum: '90',
                 resolveNum: '235'
               },
+              {
+                index: '015',
+                academyName: '经济管理学院',
+                teacherNum: '23',
+                volunteerNum: '123',
+                answerNum: '90',
+                resolveNum: '235'
+              },
+              {
+                index: '016',
+                academyName: '经济管理学院',
+                teacherNum: '23',
+                volunteerNum: '123',
+                answerNum: '90',
+                resolveNum: '235'
+              },
+              {
+                index: '15',
+                academyName: '经济管理学院',
+                teacherNum: '23',
+                volunteerNum: '123',
+                answerNum: '90',
+                resolveNum: '235'
+              },
+              {
+                index: '16',
+                academyName: '经济管理学院',
+                teacherNum: '23',
+                volunteerNum: '123',
+                answerNum: '90',
+                resolveNum: '235'
+              },
            
               
         ],
@@ -133,7 +165,8 @@ export default class HomeList extends Component {
                     bordered
                     size="small"
                     align="center"
-                    pagination={{ pageSize: 5 }} 
+                    style={{minHeight:"400px"}}
+                    pagination={{ pageSize: 10 }} 
                     dataSource={this.state.volunteerDataSource}
                     columns={volunteerColumns} 
                     rowKey="index"/>
