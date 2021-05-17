@@ -1,39 +1,39 @@
 export const volunteerColumns = [
-    {
-        title: '序号',
-        dataIndex: 'index',
-        align: 'center'
-      },
+    // {
+    //     title: '序号',
+    //     dataIndex: 'index',
+    //     align: 'center'
+    //   },
     {
         title: '学院名称',
-        dataIndex: 'academyName',
+        dataIndex: 'college',
         align: 'center'
       },
       {
         title: '入驻教师',
-        dataIndex: 'teacherNum',
+        dataIndex: 'teacherCount',
         align: 'center'
       },
       {
         title: '招募志愿者',
-        dataIndex: 'volunteerNum',
+        dataIndex: 'volunteerCount',
         align: 'center'
       },
       {
         title: '累计编辑回答',
-        dataIndex: 'answerNum',
+        dataIndex: 'solveCount',
         align: 'center'
       },
       {
         title: '累计解决问题',
-        dataIndex: 'resolveNum',
+        dataIndex: 'answerCount',
         align: 'center'
       },
 ]
 export const subjectColumns = [
     {
-        title: '序号',
-        dataIndex: 'index',
+        title: '学科ID',
+        dataIndex: 'subjectId',
         align: 'center'
       },
     {
@@ -43,24 +43,24 @@ export const subjectColumns = [
       },
       {
         title: '累计提问人数',
-        dataIndex: 'askPersonNum',
+        dataIndex: 'askerCount',
         align: 'center'
       },
       {
         title: '累计提问数量',
-        dataIndex: 'askQuestionNum',
+        dataIndex: 'questionCount',
         align: 'center'
       },
       {
         title: '累计回答数量',
-        dataIndex: 'answerNum',
+        dataIndex: 'answerCount',
         align: 'center'
       },
-      {
-        title: '累计解决问题',
-        dataIndex: 'resolveNum',
-        align: 'center'
-      },
+      // {
+      //   title: '累计解决问题',
+      //   dataIndex: 'resolveNum',
+      //   align: 'center'
+      // },
 ]
 
 

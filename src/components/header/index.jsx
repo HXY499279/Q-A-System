@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 //?把不是通过路由切换过来的组件中，将react-router 的 history、location、match 三个对象传入props对象上
 import { withRouter } from "react-router-dom";
 
@@ -23,7 +24,6 @@ class Header extends Component {
                 
                 //?跳转到 login 
                 this.props.history.replace('/login');
-                console.log('OK');
             },
           });
     }

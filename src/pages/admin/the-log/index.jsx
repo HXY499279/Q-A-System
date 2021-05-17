@@ -11,20 +11,60 @@ export default class Log extends Component {
         logDataSource:[
             {
                 index: '01',
-                account: 'tyh',
-                action: '删除',
-                actionContent: '提问：怎么能够不无聊',
-                time: '2021-02-18 16:00',
-                ip: '202.202.43.12',
+                account: '1668220',
+                action: '提问',
+                actionContent: '怎么能够不无聊',
+                time: '2021-01-18 11:20',
+                ip: '202.202.45.12',
             },
             {
                 index: '02',
-                account: 'aqiuya',
+                account: '1669243	',
                 action: '删除',
-                actionContent: '提问：怎么能够过科二',
-                time: '2021-02-18 16:00',
-                ip: '202.202.43.12'
-            }
+                actionContent: '怎么能够过科二',
+                time: '2021-03-18 16:23',
+                ip: '202.202.13.12'
+            },
+            {
+              index: '03',
+              account: '1669243	',
+              action: '回答',
+              actionContent: '拜托拜托，明天半期了',
+              time: '2021-01-23 9:23',
+              ip: '202.202.41.12'
+          },
+          {
+            index: '04',
+            account: '1669243	',
+            action: '删除',
+            actionContent: '请问这道题该怎么做？',
+            time: '2021-02-18 16:34',
+            ip: '202.202.56.12'
+        },
+        {
+          index: '05',
+          account: '1669243	',
+          action: '回答',
+          actionContent: 'x＜0的极限怎么求',
+          time: '2021-01-28 15:00',
+          ip: '202.202.43.23'
+      },
+      {
+        index: '06',
+        account: '1669243	',
+        action: '删除',
+        actionContent: '有大佬教教嘛? ',
+        time: '2021-02-18 13:34',
+        ip: '202.202.43.22'
+    },
+    {
+      index: '07',
+      account: '1669243	',
+      action: '提问',
+      actionContent: '求解，想知道一下分子应该处理？',
+      time: '2021-02-28 19:23',
+      ip: '202.202.42.12'
+  }
         ]
     }
     //?时间选择器回调函数
@@ -93,8 +133,8 @@ export default class Log extends Component {
                 <AdminTopbar tag="学科管理" timeShow='false' />
                 <div className="log-search-top">
                     <ul>
-                        <li>学科名称：<Input style={{width:200}}/></li>
-                        <li>所属学院：<Input style={{width:200}}/></li>
+                        <li>账户：<Input style={{width:200}}/></li>
+                        <li>动作：<Input style={{width:200}}/></li>
                         <li>时间： <DatePicker style={{width:200}} showTime onChange={this.onChange} onOk={this.onOk} /></li>
                     </ul>
                     <ul>

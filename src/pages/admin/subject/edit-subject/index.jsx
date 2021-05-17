@@ -3,9 +3,12 @@ import React, { Component } from 'react'
 import { 
   Input,
   Upload, 
-  Modal} from 'antd';
+  Modal,
+  Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import {reqGetAccountById} from '@/api/index'
 const { TextArea } = Input;
+const { Option } = Select;
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -14,6 +17,21 @@ function getBase64(file) {
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
+}
+function onChange(value) {
+  console.log(`selected ${value}`);
+}
+
+function onBlur() {
+  console.log('blur');
+}
+
+function onFocus() {
+  console.log('focus');
+}
+
+function onSearch(val) {
+  console.log('search:', val);
 }
 export default class EditSubject extends Component {
     state = {
@@ -29,6 +47,10 @@ export default class EditSubject extends Component {
           },
         ],
       };
+      async componentDidMount () {
+        const res = await reqGetAccountById();
+        console.log(res);
+      }
     handleCancel = () => this.setState({ previewVisible: false });
 
     handlePreview = async file => {
@@ -84,7 +106,23 @@ export default class EditSubject extends Component {
                     </ul>
                     <ul style={ulStyle}>
                       <span style={spanStyle}>所属学院：</span>
-                      <TextArea autoSize defaultValue="我是一个要被修改的学科所属学院" />
+                      <Select
+                        showSearch
+                        style={{ width: 200 }}
+                        placeholder="Select a person"
+                        optionFilterProp="children"
+                        onChange={onChange}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        onSearch={onSearch}
+                        filterOption={(input, option) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        <Option value="jack">Jack</Option>
+                        <Option value="lucy">Lucy</Option>
+                        <Option value="tom">Tom</Option>
+                      </Select>
                     </ul>
                     <ul style={{
                       display:'flex',

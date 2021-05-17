@@ -21,10 +21,22 @@ import Log from './the-log'
 import Score from './score'
 import Monitor from './monitor'
 import MessageDetail from './message/message-detail';
+
+//?引入存储模块
+import memoryUtils from '@/utils/memoryUtils'
+//?引入localstorage模块
+import storageUtils from '@/utils/storageUtils'
+
+
 const {  Footer, Sider, Content } = Layout;
 
 export default class Admin extends Component {
     render() {
+      //?判断用户信息是否存储在内存中
+      const user = memoryUtils.user
+      if (!user.adminId) {
+          return <Redirect to="/login"></Redirect>
+      }
         return (
             <Layout style={{minHeight:"100%"}}>
             <Header/>
@@ -48,7 +60,7 @@ export default class Admin extends Component {
                 </Switch>                
               </Content>
             </Layout>
-            <Footer style={{backgroundColor: '#30CB88', color: '#FFFFFF',textAlign: 'center'}}>Made by MisLab in CQUPT</Footer>
+            <Footer style={{backgroundColor: '#30CB88', color: '#FFFFFF',textAlign: 'center'}}>重庆邮电大学学生处</Footer>
           </Layout>
         )
     }

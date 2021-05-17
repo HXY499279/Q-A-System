@@ -4,9 +4,11 @@ import AdminTopbar from "../../../components/admin-topbar";
 import { Table, Modal, Input, Button} from 'antd';
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
 import EditSubject from './edit-subject'
+import {reqListSubject} from '@/api/index'
 import './index.less'
 export default class Subject extends Component {
     state = {
+      pageSize:10,
         subjectIsModalVisible: false,
         subjectDataSource:[
             {
@@ -18,8 +20,66 @@ export default class Subject extends Component {
                 askNum: '34',
                 answerNum: '23',
                 resolveNum: '56',
-            }
+            },
+            {
+              index: '02',
+              subjectName: 'C语言',
+              academy: '计算机学院',
+              teacher: '13',
+              volunteer: '49',
+              askNum: '134',
+              answerNum: '123',
+              resolveNum: '76',
+          },
+          {
+            index: '03',
+            subjectName: '电分',
+            academy: '通信学院',
+            teacher: '26',
+            volunteer: '59',
+            askNum: '124',
+            answerNum: '123',
+            resolveNum: '90',
+        },
+        {
+          index: '04',
+          subjectName: '模电',
+          academy: '计算机学院',
+          teacher: '33',
+          volunteer: '89',
+          askNum: '167',
+          answerNum: '123',
+          resolveNum: '102',
+      },
+      {
+        index: '05',
+        subjectName: '大物',
+        academy: '计算机学院',
+        teacher: '13',
+        volunteer: '123',
+        askNum: '134',
+        answerNum: '23',
+        resolveNum: '56',
+    },
+    {
+      index: '06',
+      subjectName: '数据结构',
+      academy: '经济管理学院',
+      teacher: '23',
+      volunteer: '89',
+      askNum: '84',
+      answerNum: '65',
+      resolveNum: '56',
+  }
         ]
+    }
+    async componentDidMount () {
+      let param = {
+        currentPage:1,
+        pageSize:this.state.pageSize
+      }
+      const res = await reqListSubject(param);
+      console.log(res)
     }
    //? 点击修改学科回调函数
    showEditSubject = (e) => {
@@ -96,12 +156,15 @@ export default class Subject extends Component {
                         <Button type="primary" icon={<SearchOutlined />}>
                             搜索
                         </Button>
-                        <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
-                            导出
+                        <Button type="primary" style={{marginLeft:30}} onClick={(e) => this.showEditSubject(e)}>
+                          + 添加
                         </Button>   
-                        <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}} onClick={(e) => this.showEditSubject(e)}>
-                            添加
-                        </Button>   
+                        <a href="http://121.41.94.206:8080/admin/exportExcel?type=4">
+                          <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
+                              导出
+                          </Button>  
+                        </a>
+                         
                     </ul>    
                 </div>
                 <div className="subject-search-list">

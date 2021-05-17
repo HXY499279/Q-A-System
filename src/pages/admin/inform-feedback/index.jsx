@@ -172,9 +172,11 @@ export default class Feedback extends Component {
                                     搜索
                                 </Button>
                             </ul>
-                            <Button type="primary" icon={<DownloadOutlined />}>
-                                导出
-                            </Button>
+                            <ul>
+                                <Button type="primary" icon={<DownloadOutlined />}>
+                                    导出
+                                </Button>
+                            </ul>
                         </div>
                     </div>
                     <div className="feedback-infrom-msg-content">
@@ -191,7 +193,7 @@ export default class Feedback extends Component {
                     </Modal>
                  </div>
                  <div className="feedback-infrom-msg">
-                    <AdminTopbar tag="举报管理" timeShow='false' />
+                    <AdminTopbar tag="反馈管理" timeShow='false' />
                     <div className="feedback-infrom-msg-search">
                         <div>
                             <ul>
@@ -209,9 +211,11 @@ export default class Feedback extends Component {
                                     搜索
                                 </Button>
                             </ul>
-                            <Button type="primary" icon={<DownloadOutlined />}>
-                                导出
-                            </Button>
+                            <ul>
+                                <Button type="primary" icon={<DownloadOutlined />}>
+                                    导出
+                                </Button>
+                            </ul>
                         </div>
                     </div>
                     <div className="feedback-infrom-msg-content">

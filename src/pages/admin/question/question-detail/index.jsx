@@ -3,8 +3,13 @@ import './index.less'
 import { Avatar, Image } from 'antd';
 import { CrownOutlined } from '@ant-design/icons';
 import AdminTopbar from '../../../../components/admin-topbar'
+import {qID} from '@/redux/store'
+import {reqGetQuestionById} from '@/api/index'
+//?引入localstorage模块
+import storageUtils from '@/utils/storageUtils'
 export default class QuestionDetail extends Component {
     state = {
+        describes:null,
         questionDetail:[
             {
                 id: '01',
@@ -44,52 +49,68 @@ export default class QuestionDetail extends Component {
                 ]
                 },
              
-                    {
-                        id: '03',
-                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                        name: '邱谦',
-                        identity: '志愿者',
-                        time: '2002-11-12 16:00',
-                        content: '我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答',
-                        img: '',
-                        comments:[
-                            {
-                                id: '01',
-                                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                                name: '邱谦',
-                                identity: '志愿者',
-                                time: '2002-11-12 16:00',
-                                content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                            },
-                            {
-                                id: '02',
-                                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                                name: '邱谦',
-                                identity: '志愿者',
-                                time: '2002-11-12 16:00',
-                                content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                            },
-                            {
-                                id: '03',
-                                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                                name: '邱谦',
-                                identity: '志愿者',
-                                time: '2002-11-12 16:00',
-                                content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                            }
-                            
-    
-                        ]
-                        }
-          
+                    // {
+                    //     id: '03',
+                    //     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    //     name: '邱谦',
+                    //     identity: '志愿者',
+                    //     time: '2002-11-12 16:00',
+                    //     content: '我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答',
+                    //     img: '',
+                    //     comments:[
+                    //         {
+                    //             id: '01',
+                    //             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    //             name: '邱谦',
+                    //             identity: '志愿者',
+                    //             time: '2002-11-12 16:00',
+                    //             content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
+                    //         },
+                    //         {
+                    //             id: '02',
+                    //             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    //             name: '邱谦',
+                    //             identity: '志愿者',
+                    //             time: '2002-11-12 16:00',
+                    //             content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
+                    //         },
+                    //         {
+                    //             id: '03',
+                    //             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    //             name: '邱谦',
+                    //             identity: '志愿者',
+                    //             time: '2002-11-12 16:00',
+                    //             content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
+                    //         }
+                    //     ]
+                    //     }
         ]
     }
+    async componentDidMount () {
+        const questionId = qID.getState();
+        console.log("问题id")
+        console.log(questionId)
+        let accountId = storageUtils.getUser().adminId;
+        let param = {
+            questionId,
+            accountId
+        }
+        const res = await reqGetQuestionById(param)
+        console.log(res)
+        let {describes} = res.data
+        this.setState({
+            describes
+        })
+
+        
+    }
     render() {
+        const {describes} = this.state
         return (
             <div className="question-detail">
                 <AdminTopbar tag="问题详情" timeShow="false"/>
                 <div className="question-detail-content">
-                    <h1>请问毕业签订第三方需要注意什么？</h1>
+                    <h1>{describes}</h1>
                     <hr/>
                     {
                         this.state.questionDetail.map(obj => {

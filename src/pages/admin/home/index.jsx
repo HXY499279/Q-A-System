@@ -7,6 +7,7 @@ import HomeList from './home-list'
 import './index.less'
 
 
+
 const { Header, Footer, Sider, Content } = Layout;
 
 

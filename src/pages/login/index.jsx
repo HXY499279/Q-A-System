@@ -18,12 +18,12 @@ import {
 import logo from './image/logo_bg.jpg'
 
 //?引入请求函数
-import {reqLogin} from '../../api/index'
+import {reqLogin} from '@/api/index'
 
 //?引入存储模块
-import memoryUtils from '../../utils/memoryUtils'
+import memoryUtils from '@/utils/memoryUtils'
 //?引入localstorage模块
-import storageUtils from '../../utils/storageUtils'
+import storageUtils from '@/utils/storageUtils'
 
 const gridStyle = {
     width: '100%',
@@ -33,26 +33,38 @@ const gridStyle = {
 export default class Login extends Component {
 
     loginSubmit = async (values) => {
-
-        console.log('Received values of form: ', values);
-            const result = await reqLogin();
-            const user = result;
+            const {adminId,password} = values;
+            let param = {
+                adminId,
+                password
+            }
+        
+            const result = await reqLogin(param);
             
-            //?保存用户登录信息到内存中
-            memoryUtils.user = user;
+            console.log(result);
+            const {code} = result;
+            if(code == 1){
+                const user = result.data;
+                //?保存用户登录信息到内存中
+                memoryUtils.user = user;
 
-            //?保存用户登录信息到localstorage
-            storageUtils.saveUser(user)
+                //?保存用户登录信息到localstorage
+                storageUtils.saveUser(user)
+                message.success("登录成功");
 
-            message.success("登录成功");
-            this.props.history.replace('/admin');
+                //?登录成功之后跳转路由
+                this.props.history.replace('/admin');
+            }else{
+                message.error("登录失败，请重新登录");
+            }
+            
       }
 
       render() {
         //?判断用户信息是否存储在内存中
         const user = memoryUtils.user
-        if (user.id) {
-            return <Redirect to="/admin"></Redirect>
+        if (user.adminId) {
+            return <Redirect to="/admin/home"></Redirect>
         }
         return (
             <div className="login">
@@ -71,7 +83,7 @@ export default class Login extends Component {
                             initialValues={{ remember: true }}
                             >
                             <Form.Item
-                                name="username"
+                                name="adminId"
                                 rules={[{ required: true, message: 'Please input your Username!' }]}
                             >
                                 <Input 

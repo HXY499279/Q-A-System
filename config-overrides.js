@@ -1,5 +1,12 @@
 //?配置具体的修改规则
-const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+const { override, fixBabelImports, addLessLoader,addWebpackAlias } = require('customize-cra');
+
+
+const path = require('path')
+
+function pathResolve ( pathUrl ) {
+  return path.resolve( __dirname, pathUrl )
+}
 
 module.exports = override(
   fixBabelImports('import', {
@@ -11,4 +18,8 @@ module.exports = override(
    javascriptEnabled: true,
    modifyVars: { '@primary-color': '#30CB88' },
  }),
+ addWebpackAlias({
+  //?  别名： 绝对路径
+  '@': pathResolve( './src' ),
+ })
 );

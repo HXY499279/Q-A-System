@@ -26,6 +26,9 @@ export default class UploadImg extends Component {
           },
         ],
       };
+      componentDidMount () {
+        console.log(this.props.num)
+      }
       handleCancel = () => this.setState({ previewVisible: false });
 
       handlePreview = async file => {

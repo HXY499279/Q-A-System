@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import './index.less'
 import AdminTopbar from "../../../components/admin-topbar"
+import {reqListStaticImg} from '@/api/index'
 import UploadImg from './upload'
 export default class Interface extends Component {
-   
+   async componentDidMount () {
+       const res = reqListStaticImg()
+       console.log(res)
+   }
     render() {
         return (
             <div className="interface-msg">

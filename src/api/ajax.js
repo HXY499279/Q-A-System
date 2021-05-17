@@ -9,18 +9,30 @@ import { message } from 'antd';
 
 import axios from 'axios'
 
+//?引入qs，把 json 格式的参数转换为 form-data 格式
+import qs from 'qs'
+
 export default function ajax(url, params={}, type="GET") {
-  
+
+    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+
+
     return new Promise((resolve,reject) => {
         let promise;
 
+      
+
+        
         //?执行异步 ajax 请求
         if (type === "GET") {
             promise = axios.get(url,{
                 params
             })
         } else  {
-            promise = axios.post(url,params)
+         //?把 json 格式的参数转换为 form-data 格式
+         params = qs.stringify(params)
+         promise = axios.post(url,params)
         }
         promise.then(response => {
             resolve(response.data)
