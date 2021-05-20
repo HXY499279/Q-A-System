@@ -1,22 +1,26 @@
 import React, { Component } from 'react'
 import AdminTopbar from "../../../components/admin-topbar";
-import { Table, Modal, Input, Button, Select, DatePicker} from 'antd';
+import { Table, Input, Button, Select, Cascader, message } from 'antd';
 //?引入localstorage模块
 import storageUtils from '@/utils/storageUtils'
 
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
 import './index.less'
-import {reqListAllSubject,reqListAccount,reqDisapperQuestion} from '@/api/index'
+import {reqListAllSubject,reqListAccount,reqDisapperQuestion,reqUpdateAccountRole} from '@/api/index'
 const { Option } = Select;
 export default class User extends Component {
     state = {
+        adminId:null,
         college:null,
         userName:null,
         role:null,
+        newRole:null,
+        subjectId:null,
         pageSize:1,
         total:null,
-        identity: '超级管理员',
-        userDataSource: []
+        type: storageUtils.getUser().type,
+        userDataSource: [],
+        options:[]
 
     }
     async componentDidMount () {
@@ -24,11 +28,18 @@ export default class User extends Component {
             currentPage:1,
             pageSize:this.state.pageSize
         }
+        const adminId = storageUtils.getUser().adminId
+        console.log(adminId)
         this.initUserTable(param)
+        const res = await reqListAllSubject();
+        console.log(res)
+        this.setState({
+            options:res.data,
+            adminId:Number(adminId)
+        })
+        console.log(this.state.adminId)
     }
-    handleChange = (value) => {
-        console.log(`selected ${value}`);
-      }
+   
     async initUserTable (param) {
         const res = await reqListAccount(param);
         console.log(res)
@@ -48,6 +59,8 @@ export default class User extends Component {
         }
         this.initUserTable(param)
     }
+
+    //?监听搜索条件变化
     userNameSearch = (e) => {
         if(e.target.value == ""){
               this.setState({
@@ -70,21 +83,56 @@ export default class User extends Component {
                 college: e.target.value
             })
           }
-
     }
-    roleSearch = (e) => {
-        if(e.target.value == ""){
-              this.setState({
-                role: null
-              })
-          }else{
+    onChange = (e) => {
+        console.log(e)
+        if(e == ""){
             this.setState({
-                role: e.target.value
+                role: null
             })
-          }
-
+        }else{
+          this.setState({
+            role: e
+          })
+        }
     }
 
+
+    //?实现搜索
+    userSearch = () => {
+        const {college,userName,role,pageSize} = this.state
+        let param = {
+            currentPage:1,
+            pageSize,
+            college,
+            userName,
+            role,
+        }
+        this.initUserTable(param)
+    }
+
+
+     //?监控角色级联选择
+    handleChange = (value) => {
+        console.log(value.length-1)
+        console.log(value[value.length-1])
+        if(value == []){
+            this.setState({
+                newRole: null
+            })
+        }else if (1 == value.length) {
+            this.setState({
+                newRole:Number(value[value.length-1])
+            })
+        }else{
+            this.setState({
+                newRole:Number(value[0]),
+                subjectId:Number(value[value.length-1])
+            })
+        }  
+      }
+
+    //?删除用户
     async disapper (e) {
         let param = {
              accountId:Number(e),
@@ -92,10 +140,37 @@ export default class User extends Component {
         }
         console.log(param)
         const res = await reqDisapperQuestion(param);
+        message.success("删除成功")
+        this.userSearch();
         console.log(res)
- 
+     }
+     
+     //?修改角色
+     updateUserRole = (e) => {
+         const {newRole,adminId,subjectId} = this.state
+         console.log(e)
+         let param = {
+            accountId:e,
+            newRole,
+            adminId,
+            subjectId
+         }
+         reqUpdateAccountRole(param)
+         .then(res=>{
+             if(res.code == 1){
+                 message.success("成功修改角色！")
+                 this.userSearch()
+             }
+             console.log(res)
+         })
+         .catch(err=>{
+             console.log(err)
+
+         })
      }
     render() {
+        const {options} = this.state;
+        const options2 = options.slice(0,3) 
         const userColumns = [
             {
                 title: '姓名',
@@ -111,19 +186,14 @@ export default class User extends Component {
                 title: '角色',
                 dataIndex: 'role',
                 render: (text) => {
-                    if (this.state.identity == "超级管理员") {
+                    if (this.state.type == 1) {
                         return (
                             <>
-                            <Select defaultValue={text == 1? "教师" : text == 2 ? "志愿者" : text == 3 ? "学生" : "管理员" } style={{ width: 120 }} onChange={this.handleChange}>
-                               <Option value="教师">教师</Option>
-                               <Option value="管理员">管理员</Option>
-                               <Option value="志愿者">志愿者</Option>
-                               <Option value="学生">学生</Option>
-                           </Select>
-                       </>
+                                <Cascader options={options} onChange={this.handleChange} placeholder={text == 1? "教师" : text == 2 ? "志愿者" : text == 3 ? "学生" : "管理员" } />
+                            </>
                         )
                     } else {
-                        return (<a>{text}</a>)
+                        return (<Cascader options={options2} onChange={this.handleChange} placeholder={text == 1? "教师" : text == 2 ? "志愿者" : text == 3 ? "学生" : "管理员" } />)
                     }
                 },
                 align: 'center'
@@ -131,26 +201,39 @@ export default class User extends Component {
               {
                 title: '操作',
                 dataIndex: 'accountId',
-                render: (accountId) => (<><a onClick={() => this.updateUserRole(accountId)}>刷新</a> <a onClick={() => this.disapper(accountId)}>删除</a></>),
+                render: (accountId) => (<><a onClick={() => this.updateUserRole(accountId)}>修改角色</a> <a onClick={() => this.disapper(accountId)}>删除</a></>),
                 align: 'center'
               }
         ] 
+        
         return (
             <div className="user-search">
-                <AdminTopbar tag="学科管理" timeShow='false' />
+                <AdminTopbar tag="用户管理" timeShow='false' />
                 <div className="user-search-top"> 
                     <ul>
-                        <li>姓名：<Input onChange={ e => this.userNameSearch(e) } style={{width:200}}/></li>
-                        <li>所属学院：<Input onChange={ e => this.collegeSearch(e) } style={{width:200}}/></li>
-                        <li>角色：<Input onChange={ e => this.roleSearch(e) } style={{width:200}}/></li>
+                        <li>姓名：<Input onChange={ e => this.userNameSearch(e) } style={{width:180}}/></li>
+                        <li>所属学院：<Input onChange={ e => this.collegeSearch(e) } style={{width:180}}/></li>
+                        <li>角色：
+                            <Select  style={{ width: 180 }} onChange={this.onChange}>
+                                <Option value="1">教师</Option>
+                                <Option value="2">志愿者</Option>
+                                <Option value='3'>学生</Option>
+                                <Option value='4' >管理员</Option>
+                                <Option value=''>无</Option>
+                            </Select>
+                        </li>
                     </ul>
                     <ul>
-                        <Button type="primary" icon={<SearchOutlined />}>
+                        <li>
+                        <Button type="primary" onClick={this.userSearch} icon={<SearchOutlined />}>
                             搜索
                         </Button>
-                        <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
-                            导出
-                        </Button>    
+                        </li>
+                        <a href="http://202.202.43.250:8080/admin/exportExcel?type=2">
+                            <Button type="primary" icon={<DownloadOutlined />}>
+                                导出
+                            </Button>
+                        </a>    
                     </ul>    
                 </div>
                 <div className="user-search-list">

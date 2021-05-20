@@ -1,105 +1,162 @@
 import React, { Component } from 'react'
 import './index.less'
 import AdminTopbar from "../../../components/admin-topbar";
-import { Table, Modal, Input, Button} from 'antd';
+import { Table, Modal, Input, Button,Select,Space,message} from 'antd';
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
+//?引入请求函数
+import {reqGetAllCollege,reqListSubject,reqDeleteSubject,reqAddSubject,reqUpdateSubject} from '@/api/index'
+//?引入localstorage模块
+import storageUtils from '@/utils/storageUtils'
+//?引入redux
+import {subjectIdStore,subjectNameStore,collegeStore,subjectInfoStore,subjectNoteStore} from '@/redux/store'
+
+import {subjectId} from '@/redux/action'
 import EditSubject from './edit-subject'
-import {reqListSubject} from '@/api/index'
 import './index.less'
+const { Option } = Select;
 export default class Subject extends Component {
     state = {
-      pageSize:10,
-        subjectIsModalVisible: false,
-        subjectDataSource:[
-            {
-                index: '01',
-                subjectName: '大物',
-                academy: '经济管理学院',
-                teacher: '23',
-                volunteer: '89',
-                askNum: '34',
-                answerNum: '23',
-                resolveNum: '56',
-            },
-            {
-              index: '02',
-              subjectName: 'C语言',
-              academy: '计算机学院',
-              teacher: '13',
-              volunteer: '49',
-              askNum: '134',
-              answerNum: '123',
-              resolveNum: '76',
-          },
-          {
-            index: '03',
-            subjectName: '电分',
-            academy: '通信学院',
-            teacher: '26',
-            volunteer: '59',
-            askNum: '124',
-            answerNum: '123',
-            resolveNum: '90',
-        },
-        {
-          index: '04',
-          subjectName: '模电',
-          academy: '计算机学院',
-          teacher: '33',
-          volunteer: '89',
-          askNum: '167',
-          answerNum: '123',
-          resolveNum: '102',
-      },
-      {
-        index: '05',
-        subjectName: '大物',
-        academy: '计算机学院',
-        teacher: '13',
-        volunteer: '123',
-        askNum: '134',
-        answerNum: '23',
-        resolveNum: '56',
-    },
-    {
-      index: '06',
-      subjectName: '数据结构',
-      academy: '经济管理学院',
-      teacher: '23',
-      volunteer: '89',
-      askNum: '84',
-      answerNum: '65',
-      resolveNum: '56',
-  }
-        ]
+      adminId:null,
+      pageSize:11,
+      total:null,
+      subjectName:null,
+      college:null,
+      subjectIsModalVisible: false,
+      subjectAddIsModalVisible:false,
+      subjectDataSource:[],
+      collegeData:[]
     }
-    async componentDidMount () {
+    componentDidMount = () => {
+      const adminId = storageUtils.getUser().adminId
+      this.setState({
+        adminId
+      })
       let param = {
         currentPage:1,
         pageSize:this.state.pageSize
       }
-      const res = await reqListSubject(param);
-      console.log(res)
+      reqGetAllCollege()
+      .then(res=>{
+        console.log(res)
+        this.setState({
+          collegeData:res.data
+        })
+      })
+      this.initUserTable(param)
     }
+    async initUserTable (param) {
+      const res = await reqListSubject(param);
+      const {list} = res.data;
+      const {totalRows} = res.data.pageInfo
+      this.setState({subjectDataSource:list,total:totalRows})
+  }
+
+  //?监听查询条件变化
+  subjectName = (e) => {
+    console.log(e)
+    if(e.target.value == ''){
+      this.setState({
+        subjectName: null
+      })
+    }else{
+        this.setState({
+          subjectName:e.target.value
+        })
+    }  
+  }
+  handleChange = (e) => {
+    if(e == ''){
+            this.setState({
+              college: null
+            })
+        }else{
+            this.setState({
+              college:e
+            })
+        }  
+  }
+  //?实现分页
+  handleChangeSubject = (value) => {
+    const {subjectName,college} = this.state
+    let param = {
+      currentPage:value.current,
+      pageSize:value.pageSize,
+      subjectName,
+      college
+    }
+    this.initUserTable(param)
+  }
+
+  //?实现搜索
+  searchSubject = () => {
+    const {subjectName,college,pageSize} = this.state
+    let param = {
+      currentPage:1,
+      pageSize,
+      subjectName,
+      college
+    }
+    this.initUserTable(param)
+  }
+
+
    //? 点击修改学科回调函数
    showEditSubject = (e) => {
+    subjectIdStore.dispatch(subjectId(e))
     this.setState({subjectIsModalVisible:true})
     console.log(e)
     console.log('我点击了修改学科')
    }
-   handleEdit = () => {
+   changeEdit = () => {
+    let param = {
+      subjectId:subjectIdStore.getState(),
+      subjectName:subjectNameStore.getState(),
+      college:collegeStore.getState(),
+      subjectInfo:subjectInfoStore.getState(),
+      note:subjectNoteStore.getState(),
+      adminId:this.state.adminId
+
+    }
+    reqUpdateSubject(param)
+    .then(res=>{
+      console.log(res)
+    })
+
     this.setState({subjectIsModalVisible:false})
     }
-    cancelEdit = () => {
+    cancelChangeEditEdit = () => {
         this.setState({subjectIsModalVisible:false})
     }
+
+
+    //?添加学科
+    showAddSubject = () => {
+
+      this.setState({subjectAddIsModalVisible:true})
+     }
+     addEdit = () => {
+      let param = {
+        subjectName:subjectNameStore.getState(),
+        college:collegeStore.getState(),
+        subjectInfo:subjectInfoStore.getState(),
+        note:subjectNoteStore.getState(),
+        adminId:this.state.adminId
+
+      }
+      reqAddSubject(param)
+      .then(res=>{
+        console.log(res)
+      })
+
+      console.log("我点击了添加学科")
+      this.setState({subjectAddIsModalVisible:false})
+      }
+      cancelAddEdit = () => {
+
+          this.setState({subjectAddIsModalVisible:false})
+      }
     render() {
         const subjectColumns = [
-            {
-                title: '序号',
-                dataIndex: 'index',
-                align: 'center'
-              },
             {
                 title: '学科名称',
                 dataIndex: 'subjectName',
@@ -107,59 +164,67 @@ export default class Subject extends Component {
               },
               {
                 title: '所属学院',
-                dataIndex: 'academy',
+                dataIndex: 'college',
                 align: 'center'
               },
               {
                 title: '教师',
-                dataIndex: 'teacher',
+                dataIndex: 'teacherCount',
                 align: 'center'
               },
               {
                 title: '志愿者',
-                dataIndex: 'volunteer',
+                dataIndex: 'volunteerCount',
                 width: '10%',
                 align: 'center'
               },
               {
                 title: '累计提问',
-                dataIndex: 'askNum',
+                dataIndex: 'questionCount',
                 align: 'center'
               },,
               {
                 title: '累计回答',
-                dataIndex: 'answerNum',
+                dataIndex: 'answerCount',
                 align: 'center'
               },
               {
                 title: '累计解决',
-                dataIndex: 'resolveNum',
+                dataIndex: 'solvedQuestionCount',
                 align: 'center'
               },
               {
-                title: '操作',
-                dataIndex: '',
-                render: (e) => (<><a onClick={(e) => this.showEditSubject(e)}>修改</a> <a>删除</a></>),
+                title: '操作', 
+                dataIndex: 'subjectId',
+                render: (subjectId) => (<><a onClick={() => this.showEditSubject(subjectId)}>修改</a> <a onClick={() => this.deleteSubject(subjectId)}>删除</a></>),
                 align: 'center'
               }
         ]
-        const {subjectIsModalVisible} = this.state
+        const {subjectIsModalVisible,subjectAddIsModalVisible,collegeData,pageSize,total} = this.state
         return (
             <div className="subject-search">
                 <AdminTopbar tag="学科管理" timeShow='false' />
                 <div className="subject-search-top">
                     <ul>
-                        <li>学科名称：<Input style={{width:200}}/></li>
-                        <li>所属学院：<Input style={{width:200}}/></li>
+                        <li>学科名称：<Input onChange={e => this.subjectName(e)} style={{width:200}}/></li>
+                        <li>所属学院：
+                          <Select  style={{ width: 200 }} onChange={this.handleChange}>
+                            {collegeData.map((obj) => {
+                              return(
+                                <Option value={obj}>{obj}</Option>
+                              ) 
+                            })}
+                          </Select>
+                        </li>
                     </ul>
                     <ul>
-                        <Button type="primary" icon={<SearchOutlined />}>
+                        <Button type="primary" onClick={() => this.searchSubject()} icon={<SearchOutlined />}>
                             搜索
                         </Button>
-                        <Button type="primary" style={{marginLeft:30}} onClick={(e) => this.showEditSubject(e)}>
+                        <Button type="primary" style={{marginLeft:30}} onClick={(e) => this.showAddSubject(e)}>
                           + 添加
                         </Button>   
-                        <a href="http://121.41.94.206:8080/admin/exportExcel?type=4">
+                        <a href="http://202.202.43.250:8080/admin/exportExcel?type=4">
                           <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
                               导出
                           </Button>  
@@ -171,13 +236,17 @@ export default class Subject extends Component {
                   <Table 
                   bordered
                   align="center"
-                  pagination={{ pageSize: 10 }} 
+                  onChange={this.handleChangeSubject}
+                  pagination={{ "pageSize": pageSize,"total":total }} 
                   dataSource={this.state.subjectDataSource}
                   columns={subjectColumns} 
-                  rowKey="index"/>
+                  rowKey="subjectId"/>
                 </div>
-                <Modal title="修改学科" visible={subjectIsModalVisible} onOk={this.handleEdit} onCancel={this.cancelEdit}>
-                    <EditSubject/>
+                <Modal title="修改学科" destroyOnClose visible={subjectIsModalVisible} onOk={this.changeEdit} onCancel={this.cancelChangeEditEdit}>
+                    <EditSubject type="change"/>
+                </Modal>
+                <Modal title="添加学科" destroyOnClose visible={subjectAddIsModalVisible} onOk={this.addEdit} onCancel={this.cancelAddEdit}>
+                    <EditSubject type='add'/>
                 </Modal>
             </div>
         )

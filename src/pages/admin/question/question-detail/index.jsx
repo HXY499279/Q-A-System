@@ -4,90 +4,16 @@ import { Avatar, Image } from 'antd';
 import { CrownOutlined } from '@ant-design/icons';
 import AdminTopbar from '../../../../components/admin-topbar'
 import {qID} from '@/redux/store'
-import {reqGetQuestionById} from '@/api/index'
+import {reqGetQuestionById,reqGetQuestionById2} from '@/api/index'
 //?引入localstorage模块
 import storageUtils from '@/utils/storageUtils'
 export default class QuestionDetail extends Component {
     state = {
         describes:null,
-        questionDetail:[
-            {
-                id: '01',
-                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                name: '邱谦',
-                identity: '志愿者',
-                time: '2002-11-12 16:00',
-                content: '我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答',
-                img: '',
-                comments:[
-                    {
-                        id: '001',
-                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                        name: '邱谦1',
-                        identity: '志愿者',
-                        time: '2002-11-12 16:00',
-                        content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                    },
-                    {
-                        id: '002',
-                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                        name: '邱谦2',
-                        identity: '志愿者',
-                        time: '2002-11-12 16:00',
-                        content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                    },
-                    {
-                        id: '003',
-                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                        name: '邱谦3',
-                        identity: '志愿者',
-                        time: '2002-11-12 16:00',
-                        content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                    }
-                    
-
-                ]
-                },
-             
-                    // {
-                    //     id: '03',
-                    //     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                    //     name: '邱谦',
-                    //     identity: '志愿者',
-                    //     time: '2002-11-12 16:00',
-                    //     content: '我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答我是回答',
-                    //     img: '',
-                    //     comments:[
-                    //         {
-                    //             id: '01',
-                    //             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                    //             name: '邱谦',
-                    //             identity: '志愿者',
-                    //             time: '2002-11-12 16:00',
-                    //             content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                    //         },
-                    //         {
-                    //             id: '02',
-                    //             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                    //             name: '邱谦',
-                    //             identity: '志愿者',
-                    //             time: '2002-11-12 16:00',
-                    //             content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                    //         },
-                    //         {
-                    //             id: '03',
-                    //             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                    //             name: '邱谦',
-                    //             identity: '志愿者',
-                    //             time: '2002-11-12 16:00',
-                    //             content: '我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论我是评论',
-                    //         }
-                    //     ]
-                    //     }
-        ]
+        questionDetail:[]
     }
     async componentDidMount () {
-        const questionId = qID.getState();
+        const questionId = storageUtils.getQuestionId();
         console.log("问题id")
         console.log(questionId)
         let accountId = storageUtils.getUser().adminId;
@@ -101,8 +27,11 @@ export default class QuestionDetail extends Component {
         this.setState({
             describes
         })
-
-        
+        const res2 = await reqGetQuestionById2(param)
+        console.log(res2)
+        this.setState({
+            questionDetail:res2.data
+        })
     }
     render() {
         const {describes} = this.state
@@ -115,22 +44,22 @@ export default class QuestionDetail extends Component {
                     {
                         this.state.questionDetail.map(obj => {
                             return (
-                                <div className="answers" key={obj.id}>
+                                <div className="answers" key={obj.answerId}>
                                     <div className="answer-content">
                                         <Avatar
                                         size={60}
-                                        src={<Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                        src={<Image src={"http://202.202.43.250:8080/img" + obj.userImg} />}
                                         />
                                         <ul className="answer-content-ul">
                                             <li>
-                                                {obj.name}
+                                                {obj.userName}
                                             </li>
                                             <li>
-                                            <CrownOutlined style={{color:"#30CB88"}}/>
-                                            <span> {obj.identity}</span>
+                                            
+                                            <span> {obj.role == 1? "教师" : obj.role == 2 ? "志愿者" : obj.role == 3 ? "学生" : "管理员"  }</span>
                                             </li>
                                             <li>
-                                                {obj.time}
+                                                {obj.answerTime}
                                             </li>
                                         </ul>
                                         <ul>回答：{obj.content}</ul>
@@ -139,21 +68,21 @@ export default class QuestionDetail extends Component {
                                     {
                                         obj.comments.map((commentObj) => {
                                             return (
-                                                <div className="comments" key={commentObj.id}>
+                                                <div className="comments" key={commentObj.commentId}>
                                                     <Avatar
                                                     size={40}
-                                                    src={<Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                                    src={<Image src={"http://202.202.43.250:8080/img" + commentObj.userImg}  />}
                                                     />
                                                     <ul className="comments-content-ul">
                                                         <li>
-                                                            <span>{commentObj.name}</span>
+                                                            <span>{commentObj.userName}</span>
                                                         </li>
                                                         <li>
-                                                        <CrownOutlined style={{color:"#30CB88"}}/>
-                                                        <span> {commentObj.identity}</span>
+                                                        
+                                                        <span> {commentObj.role == 1 ? "教师" : commentObj.role == 2 ? "志愿者" : commentObj.role == 3 ? "学生" : "管理员" }</span>
                                                         </li>
                                                         <li>
-                                                            {commentObj.time}
+                                                            {commentObj.commentTime}
                                                         </li>
                                                     </ul>
                                                     <ul>评论内容：{commentObj.content}</ul>
@@ -161,6 +90,7 @@ export default class QuestionDetail extends Component {
                                                         )
                                                     })
                                                 }
+                                    <hr/>
                                         </div>
                             )
                         })

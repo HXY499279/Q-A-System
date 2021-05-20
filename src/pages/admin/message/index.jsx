@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import AdminTopbar from "../../../components/admin-topbar";
 //? antd
-import { Table, Modal, Input, Button, Select, DatePicker} from 'antd';
+import { Table, Input, Button, DatePicker} from 'antd';
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
 import './index.less'
 const { TextArea } = Input;
@@ -99,9 +99,11 @@ export default class Message extends Component {
                             <Button type="primary" icon={<SearchOutlined />}>
                                 搜索
                             </Button>
-                            <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
-                                导出
-                            </Button>   
+                            <a href="http://202.202.43.250:8080/admin/exportExcel?type=3">
+                                <Button type="primary" icon={<DownloadOutlined />}>
+                                    导出
+                                </Button>
+                            </a> 
                         </ul>    
                     </div>
                     <div className="msg-search-list">

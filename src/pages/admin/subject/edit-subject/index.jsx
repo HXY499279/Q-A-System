@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
-
+//?引入localstorage模块
+import storageUtils from '@/utils/storageUtils'
+import {subjectIdStore,subjectNameStore,collegeStore,subjectInfoStore,subjectNoteStore} from '@/redux/store'
+import {subjectName,college,subjectInfo,subjectNote} from "@/redux/action"
 import { 
   Input,
   Upload, 
   Modal,
-  Select } from 'antd';
+  Select,
+  message} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import {reqGetAccountById} from '@/api/index'
+import {reqGetSubjectById,reqGetAllCollege} from '@/api/index'
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -18,26 +22,21 @@ function getBase64(file) {
     reader.onerror = error => reject(error);
   });
 }
-function onChange(value) {
-  console.log(`selected ${value}`);
-}
 
-function onBlur() {
-  console.log('blur');
-}
-
-function onFocus() {
-  console.log('focus');
-}
-
-function onSearch(val) {
-  console.log('search:', val);
-}
 export default class EditSubject extends Component {
     state = {
+        adminId:null,
+        college:null,
+        iconPath:null,
+        note:"",
+        url:"",
+        subjectId:null,
+        subjectInfo:null,
+        subjectName:null,
         previewVisible: false,
         previewImage: '',
         previewTitle: '',
+        collegeData:[],
         fileList: [
           {
             uid: '-1',
@@ -47,10 +46,99 @@ export default class EditSubject extends Component {
           },
         ],
       };
-      async componentDidMount () {
-        const res = await reqGetAccountById();
-        console.log(res);
+      componentDidMount = () => {
+        if(this.props.type == "add"){
+          this.setState({
+            url:'http://202.202.43.250:8080/admin/addSubject'
+          })
+        }else{
+          this.setState({
+            url:'http://202.202.43.250:8080/admin/updateSubject'
+          })
+        }
+        
+       const adminId = storageUtils.getUser().adminId
+        this.setState({
+          adminId,
+          subjectId:Number(subjectIdStore.getState())
+        })
+       
+        if(this.props.type == "change"){
+          reqGetSubjectById({subjectId:Number(subjectIdStore.getState())})
+          .then(res=>{
+            console.log(res)
+            const {college,iconPath,note,subjectInfo,subjectName} = res.data
+            // console.log(college)
+            this.setState({
+              college,iconPath,note,subjectInfo,subjectName
+            })
+          });
+        }
+        reqGetAllCollege()
+        .then(res=>{
+          console.log(res)
+          this.setState({
+            collegeData:res.data
+          })
+        })
       }
+
+      //?监听学院变化
+      handleCollegeChange = (e) => {
+        console.log(e)
+        if(e == ''){
+          collegeStore.dispatch(college(null))
+                this.setState({
+                  college: null
+                })
+            }else{
+              collegeStore.dispatch(college(e))
+                this.setState({
+                  college:e
+                })
+            }  
+      }
+      nameTxtChanged = (e) => {
+        if(e.target.value == ""){
+          subjectNameStore.dispatch(subjectName(null))
+          this.setState({
+            subjectName: null
+          })
+        }else{
+          subjectNameStore.dispatch(subjectName(e.target.value))
+          this.setState({
+              subjectName: e.target.value
+          })
+        }
+      }
+      infoChanged = (e) => {
+        if(e.target.value == ""){
+          subjectInfoStore.dispatch(subjectInfo(null))
+          this.setState({
+            subjectInfo: null
+          })
+        }else{
+          subjectInfoStore.dispatch(subjectInfo(e.target.value))
+          this.setState({
+              subjectInfo: e.target.value
+          })
+        }
+
+      }
+      noteChanged = (e) => {
+        if(e.target.value == ""){
+          subjectNoteStore.dispatch(subjectNote(null))
+          this.setState({
+            note: null
+          })
+        }else{
+          subjectNoteStore.dispatch(subjectNote(e.target.value))
+          this.setState({
+              note: e.target.value
+          })
+        }
+      }
+
     handleCancel = () => this.setState({ previewVisible: false });
 
     handlePreview = async file => {
@@ -64,9 +152,36 @@ export default class EditSubject extends Component {
         previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
       });
     };
-    handleChange = ({ fileList }) => this.setState({ fileList });
+    handleChange = ({file, fileList }) => {
+      console.log(file)
+      getBase64(file)
+      .then(res=>{
+        console.log("我想转换为2进制")
+        console.log(res)
+      })
+      this.setState({ fileList })
+      if(file.status == 'done' && this.props.type == "add"){
+        message.success("成功添加图标！")
+      }else if(file.status == 'done' && this.props.type == "change"){
+        message.success("成功修改图标！")
+      }
+    };
     render() {
-        const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+        const {
+          adminId,
+          previewVisible, 
+          previewImage, 
+          fileList,
+          previewTitle,
+          previewTitlesubjectName,
+          subjectName,
+          subjectInfo,
+          subjectId,
+          collegeData,
+          college,
+          url,
+          note,
+          iconPath } = this.state;
         const uploadButton = (
         <div>
             <PlusOutlined />
@@ -78,65 +193,63 @@ export default class EditSubject extends Component {
           justifyContent:"space-between"
         }
         const spanStyle = {whiteSpace:'nowrap'}
+        const paramData = {
+          subjectId,adminId
+        }
         return (
             <>
                      <ul style={ulStyle}>
                        <span  style={spanStyle}>学科图标：</span>
                         <Upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        action={url}
+                        name="icon"
+                        data={paramData}
                         listType="picture-card"
                         fileList={fileList}
                         onPreview={this.handlePreview}
                         onChange={this.handleChange}
                         >
-                        {fileList.length >= 8 ? null : uploadButton}
+                        {fileList.length >= 1 ? null : uploadButton}
                         </Upload>
                         <Modal
                         visible={previewVisible}
                         title={previewTitle}
+                        
                         footer={null}
                         onCancel={this.handleCancel}
                         >
-                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        <img alt="example" style={{ width: '100%' }} src={'http://202.202.43.250:8080/img'+iconPath} />
                         </Modal>
                     </ul>
                     <ul style={ulStyle}>
                       <span style={spanStyle}>学科名称：</span>
-                      <TextArea autoSize defaultValue="我是一个要被修改的学科名称" />
+                      <TextArea autoSize onChange={ e => this.nameTxtChanged(e)} value={subjectName}/>
                     </ul>
                     <ul style={ulStyle}>
-                      <span style={spanStyle}>所属学院：</span>
-                      <Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Select a person"
-                        optionFilterProp="children"
-                        onChange={onChange}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        onSearch={onSearch}
-                        filterOption={(input, option) =>
-                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                      >
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="tom">Tom</Option>
-                      </Select>
+                      <span style={spanStyle}>所属学院：
+                          <Select  style={{ width: 200 }} onChange={this.handleCollegeChange} value={college} >
+                            {collegeData.map((obj) => {
+                              return(
+                                <Option value={obj}>{obj}</Option>
+                              ) 
+                            })}
+                          </Select>
+                      </span>
+                      
                     </ul>
                     <ul style={{
                       display:'flex',
                       justifyContent:"space-between"
                     }}>
                       <span style={spanStyle}>学科简介：</span>
-                       <TextArea autoSize defaultValue="我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容我是要被修改的学科的内容" />
+                       <TextArea autoSize onChange={ e => this.infoChanged(e)} value={subjectInfo}  />
                     </ul>
                     <ul style={{
                       display:'flex',
                       justifyContent:"space-between"
                     }}>
                       <span style={spanStyle}>学科备注：</span>
-                       <TextArea autoSize defaultValue="我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介我是要被修改的学科的简介" />
+                       <TextArea autoSize onChange={ e => this.noteChanged(e)} value={note}/>
                     </ul>                      
             </>
         )

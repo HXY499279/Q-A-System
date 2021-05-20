@@ -147,8 +147,6 @@ export default class EditQuestion extends Component {
                         >
                         <img alt="example" style={{ width: '100%' }} src={previewImage} />
                         </Modal>
-                        
-            
                     </ul>
                     <ul>
                         时间：{publishTime}创建 —— {updateTime}修改

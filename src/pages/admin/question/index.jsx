@@ -18,7 +18,7 @@ import memoryUtils from '@/utils/memoryUtils'
 import storageUtils from '@/utils/storageUtils'
 
 //? antd
-import { Table, Modal, Input, Button, Select, DatePicker,TimePicker, message,Space} from 'antd';
+import { Table, Modal, Input, Button, Select, DatePicker, message,Space} from 'antd';
 import {questionId,stuId} from '@/redux/action'
 import {qID,qTitleStore,qDescribeStore,stuIdStore} from '@/redux/store'
 
@@ -241,8 +241,11 @@ export default class Question extends Component {
 
     //?跳转问题详情页
     goQuestionDetail = (e) => {
+         //?保存用户登录信息到localstorage
+        storageUtils.saveQuestionId(e)
         console.log(e)
         qID.dispatch(questionId(e))
+
     }
 
     //?实现分页
@@ -377,7 +380,7 @@ export default class Question extends Component {
                             
                         </ul>
                         <ul>
-                            <a href="http://121.41.94.206:8080/admin/exportExcel?type=1">
+                            <a href="http://202.202.43.250:8080/admin/exportExcel?type=1">
                                 <Button type="primary" icon={<DownloadOutlined />}>
                                     导出
                                 </Button>

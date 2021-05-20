@@ -24,8 +24,61 @@ export const questionChangeImg = (value) => (
 )
 export const stuId = (value) => (
     {
-        type:'changeImg',
+        type:'',
         value
     }
 )
+export const reportId = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const feedbackId = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const logId = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const subjectId = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const subjectName = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const college = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const subjectInfo = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+export const subjectNote = (value) => (
+    {
+        type:'',
+        value
+    }
+)
+
+
+
+
+
 

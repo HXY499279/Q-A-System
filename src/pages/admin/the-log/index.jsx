@@ -1,86 +1,134 @@
 import React, { Component } from 'react'
 import './index.less'
 import AdminTopbar from "../../../components/admin-topbar";
-import { Table, Modal, Input, Button} from 'antd';
+import { Table, Modal, Input, Button,Select,Space} from 'antd';
 import { DatePicker } from 'antd';
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
+//?引入redux
+import {logIdStore} from '@/redux/store' 
+import {logId} from '@/redux/action'
+//?引入请求函数
+import {reqListLog,reqGetLogById} from '@/api/index'
 import EditLog from './edit-log'
+const { Option } = Select;
 export default class Log extends Component {
     state = {
+        timeType:"year",
+        pageSize:3,
+        total:null,
+        logName:null,
+        logTime:null,
+        type:null,
         logIsModalVisible: false,
-        logDataSource:[
-            {
-                index: '01',
-                account: '1668220',
-                action: '提问',
-                actionContent: '怎么能够不无聊',
-                time: '2021-01-18 11:20',
-                ip: '202.202.45.12',
-            },
-            {
-                index: '02',
-                account: '1669243	',
-                action: '删除',
-                actionContent: '怎么能够过科二',
-                time: '2021-03-18 16:23',
-                ip: '202.202.13.12'
-            },
-            {
-              index: '03',
-              account: '1669243	',
-              action: '回答',
-              actionContent: '拜托拜托，明天半期了',
-              time: '2021-01-23 9:23',
-              ip: '202.202.41.12'
-          },
-          {
-            index: '04',
-            account: '1669243	',
-            action: '删除',
-            actionContent: '请问这道题该怎么做？',
-            time: '2021-02-18 16:34',
-            ip: '202.202.56.12'
-        },
-        {
-          index: '05',
-          account: '1669243	',
-          action: '回答',
-          actionContent: 'x＜0的极限怎么求',
-          time: '2021-01-28 15:00',
-          ip: '202.202.43.23'
-      },
-      {
-        index: '06',
-        account: '1669243	',
-        action: '删除',
-        actionContent: '有大佬教教嘛? ',
-        time: '2021-02-18 13:34',
-        ip: '202.202.43.22'
-    },
-    {
-      index: '07',
-      account: '1669243	',
-      action: '提问',
-      actionContent: '求解，想知道一下分子应该处理？',
-      time: '2021-02-28 19:23',
-      ip: '202.202.42.12'
-  }
-        ]
+        logDataSource:[]
     }
-    //?时间选择器回调函数
-    onChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+
+    componentDidMount =  ()=> {
+        let param = {
+          currentPage:1,
+          pageSize:this.state.pageSize
       }
-      
-    onOk = (value) => {
-        console.log('onOk: ', value);
-      }
+      this.initLogTable(param)
+    }
+
+
+    //?初始化日志列表
+    async initLogTable (param) {
+      const res = await reqListLog(param);
+      // console.log(res)
+      const {list} = res.data;
+      const {totalRows} = res.data.pageInfo
+      this.setState({logDataSource:list,total:totalRows})
+  }
+
+  //?监听查询条件的变化
+  logName = (e) => {
+        if(e.target.value == ""){
+                this.setState({
+                    logName: null
+                })
+            }else{
+                this.setState({
+                    logName: e.target.value
+                })
+            } 
+            // console.log(this.state.informContent)
+
+    }
+
+   //?动作类型
+   handleChange = (value) => {
+    if(value == ''){
+        this.setState({
+            type: null
+        })
+    }else{
+        this.setState({
+            type:Number(value)
+        })
+    }  
+    console.log(`selected ${value}`);
+  }
+
+   //?设置时间选择器类型
+     setType = (e) => {
+        this.setState({
+            timeType:e
+        })
+    }
+    //? 时间选择器回调函数
+    onChange = (date, dateStrings) => {
+        console.log(dateStrings)
+        if(dateStrings == '') {
+            this.setState({
+                logTime:null
+            })
+        }else{
+            this.setState({
+                logTime:dateStrings
+            })
+        }  
+    }
+    //?实现分页
+    handleChangeLog = (value) => {
+        const {
+            logName,
+            logTime,
+            type
+            } = this.state;
+        let param = {
+            currentPage:value.current,
+            pageSize:value.pageSize,
+            logName,
+            logTime,
+            type
+        }
+        this.initLogTable(param)
+    }
+    
+    //?实现搜索
+    logSearch = () => {
+        const {
+            pageSize,
+            logName,
+            logTime,
+            type
+            } = this.state;
+        let param = {
+            currentPage:1,
+            pageSize,
+            logName,
+            logTime,
+            type
+        }
+        this.initLogTable(param)
+
+    }
+
     //? 点击查看日志或添加日志回调函数
    showEditLog = (e) => {
+    logIdStore.dispatch(logId(e)) 
     this.setState({logIsModalVisible:true})
-    console.log(e)
-    console.log('我点击了查看日志')
    }
    handleEdit = () => {
     this.setState({logIsModalVisible:false})
@@ -90,29 +138,27 @@ export default class Log extends Component {
     }
     render() {
         const logColumns = [
-            {
-                title: '序号',
-                dataIndex: 'index',
-                align: 'center'
-              },
+           
             {
                 title: '账户',
-                dataIndex: 'account',
+                dataIndex: 'adminName',
                 align: 'center'
               },
               {
                 title: '动作',
-                dataIndex: 'action',
+                dataIndex: 'type',
+                render: (type) => (<span>{ type == 1 ? "增加" : type == 2 ? "删除" : type == 3 ? "修改" : "无" }</span>),
+               
                 align: 'center'
               },
               {
                 title: '动作内容',
-                dataIndex: 'actionContent',
+                dataIndex: 'content',
                 align: 'center'
               },
               {
                 title: '时间',
-                dataIndex: 'time',
+                dataIndex: 'logTime',
                 align: 'center'
               },
               {
@@ -122,43 +168,61 @@ export default class Log extends Component {
               },
               {
                 title: '操作',
-                dataIndex: '',
-                render: (e) => (<a onClick={(e) => this.showEditLog(e)}>查看</a>),
+                dataIndex: 'logId',
+                render: (logId) => (<a onClick={() => this.showEditLog(logId)}>查看</a>),
                 align: 'center'
               }
         ]
-        const {logIsModalVisible} = this.state
+        const {logIsModalVisible,timeType,pageSize,total} = this.state
         return (
             <div className="log-search">
-                <AdminTopbar tag="学科管理" timeShow='false' />
+                <AdminTopbar tag="日志管理" timeShow='false' />
                 <div className="log-search-top">
                     <ul>
-                        <li>账户：<Input style={{width:200}}/></li>
-                        <li>动作：<Input style={{width:200}}/></li>
-                        <li>时间： <DatePicker style={{width:200}} showTime onChange={this.onChange} onOk={this.onOk} /></li>
+                        <li>账户：<Input onChange={ e => this.logName(e)} style={{width:180}}/></li>
+                        <li>动作：
+                            <Select  style={{ width: 180 }} onChange={this.handleChange}>
+                                <Option value="1">增加</Option>
+                                <Option value="2">删除</Option>
+                                <Option value='3'>修改</Option>
+                                <Option value=''>无</Option>
+                            </Select>
+                        </li>
+                        <li>时间： 
+                          <Space>
+                                <Select defaultValue={timeType} onChange={this.setType}>
+                                  <Option value="date">Date</Option>
+                                  <Option value="month">Month</Option>
+                                  <Option value="year">Year</Option>
+                                </Select>               
+                                <DatePicker picker={timeType} onChange={this.onChange} />
+                          </Space>
+                        </li>
                     </ul>
                     <ul>
-                        <Button type="primary" icon={<SearchOutlined />}>
+                        <li>
+                        <Button type="primary" onClick={this.logSearch} icon={<SearchOutlined />}>
                             搜索
                         </Button>
-                        <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
-                            导出
-                        </Button>   
-                        <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}} onClick={(e) => this.showEditLog(e)}>
-                            添加
-                        </Button>   
+                        </li>
+                        <a href="http://202.202.43.250:8080/admin/exportExcel?type=7">
+                            <Button type="primary" icon={<DownloadOutlined />}>
+                              导出
+                            </Button>
+                        </a>    
                     </ul>    
                 </div>
                 <div className="log-search-list">
                   <Table 
                   bordered
                   align="center"
-                  pagination={{ pageSize: 10 }} 
+                  onChange={this.handleChangeLog}
+                  pagination={{ "pageSize": pageSize,"total":total }} 
                   dataSource={this.state.logDataSource}
                   columns={logColumns} 
-                  rowKey="index"/>
+                  rowKey="logId"/>
                 </div>
-                <Modal title="日志" visible={logIsModalVisible} onOk={this.handleEdit} onCancel={this.cancelEdit}>
+                <Modal title="日志" destroyOnClose footer={null} visible={logIsModalVisible} onOk={this.handleEdit} onCancel={this.cancelEdit}>
                     <EditLog/>
                 </Modal>
             </div>
