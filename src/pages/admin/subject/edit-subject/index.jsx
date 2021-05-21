@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 //?引入localstorage模块
 import storageUtils from '@/utils/storageUtils'
-import {subjectIdStore,subjectNameStore,collegeStore,subjectInfoStore,subjectNoteStore} from '@/redux/store'
-import {subjectName,college,subjectInfo,subjectNote} from "@/redux/action"
+import {subjectIdStore,subjectNameStore,collegeStore,subjectInfoStore,subjectNoteStore,subjectIconStore} from '@/redux/store'
+import {subjectName,college,subjectInfo,subjectNote,subjectIcon} from "@/redux/action"
 import { 
   Input,
   Upload, 
@@ -15,6 +15,8 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 function getBase64(file) {
+  console.log('进入64')
+  console.log(file)
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -29,7 +31,7 @@ export default class EditSubject extends Component {
         college:null,
         iconPath:null,
         note:"",
-        url:"",
+        url:"123",
         subjectId:null,
         subjectInfo:null,
         subjectName:null,
@@ -37,25 +39,19 @@ export default class EditSubject extends Component {
         previewImage: '',
         previewTitle: '',
         collegeData:[],
-        fileList: [
-          {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-        ],
+        img:null,
+        fileList: [],
       };
       componentDidMount = () => {
-        if(this.props.type == "add"){
-          this.setState({
-            url:'http://202.202.43.250:8080/admin/addSubject'
-          })
-        }else{
-          this.setState({
-            url:'http://202.202.43.250:8080/admin/updateSubject'
-          })
-        }
+        // if(this.props.type == "add"){
+        //   this.setState({
+        //     url:'/admin/addSubject'
+        //   })
+        // }else{
+        //   this.setState({
+        //     url:'/admin/updateSubject'
+        //   })
+        // }
         
        const adminId = storageUtils.getUser().adminId
         this.setState({
@@ -67,10 +63,13 @@ export default class EditSubject extends Component {
           reqGetSubjectById({subjectId:Number(subjectIdStore.getState())})
           .then(res=>{
             console.log(res)
-            const {college,iconPath,note,subjectInfo,subjectName} = res.data
+            const {college,note,subjectInfo,subjectName} = res.data
+            let {iconPath} = res.data
+            iconPath = 'http://202.202.43.250:8080/img/' + iconPath;
+            const fileList = [{url:iconPath}]
             // console.log(college)
             this.setState({
-              college,iconPath,note,subjectInfo,subjectName
+              college,iconPath,note,subjectInfo,subjectName,fileList
             })
           });
         }
@@ -139,6 +138,12 @@ export default class EditSubject extends Component {
         }
       }
 
+
+      beforeUpload (file, fileList) {
+        console.log("上传前")
+        console.log(file)
+        // subjectIconStore.dispatch(subjectIcon(file))
+      }
     handleCancel = () => this.setState({ previewVisible: false });
 
     handlePreview = async file => {
@@ -153,12 +158,13 @@ export default class EditSubject extends Component {
       });
     };
     handleChange = ({file, fileList }) => {
+      subjectIconStore.dispatch(subjectIcon(file))
       console.log(file)
-      getBase64(file)
-      .then(res=>{
-        console.log("我想转换为2进制")
-        console.log(res)
-      })
+      // getBase64(file)
+      // .then(res=>{
+      //   console.log("我想转换为2进制")
+      //   console.log(res)
+      // })
       this.setState({ fileList })
       if(file.status == 'done' && this.props.type == "add"){
         message.success("成功添加图标！")
@@ -203,6 +209,7 @@ export default class EditSubject extends Component {
                         <Upload
                         action={url}
                         name="icon"
+                        beforeUpload={this.beforeUpload}
                         data={paramData}
                         listType="picture-card"
                         fileList={fileList}
@@ -230,7 +237,7 @@ export default class EditSubject extends Component {
                           <Select  style={{ width: 200 }} onChange={this.handleCollegeChange} value={college} >
                             {collegeData.map((obj) => {
                               return(
-                                <Option value={obj}>{obj}</Option>
+                                <Option key={obj} value={obj}>{obj}</Option>
                               ) 
                             })}
                           </Select>

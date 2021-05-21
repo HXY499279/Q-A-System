@@ -67,4 +67,9 @@ export const subjectNote = (pre,action) => {
     const {type,value} = action;
     return value;
 }
+//学科icon
+export const subjectIcon= (pre,action) => {
+    const {type,value} = action;
+    return value;
+}
 

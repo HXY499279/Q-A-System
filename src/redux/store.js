@@ -1,5 +1,5 @@
 import {createStore} from 'redux'
-import {questionChangeTitle,questionChangeDescribe,questionChangeImg,questionId,stuId,reportId,feedbackId,logId,subjectId,subjectName,college,subjectInfo,subjectNote} from './reducers'
+import {questionChangeTitle,questionChangeDescribe,questionChangeImg,questionId,stuId,reportId,feedbackId,logId,subjectId,subjectName,college,subjectInfo,subjectNote,subjectIcon} from './reducers'
 export const qID = createStore(questionId);
 export const qTitleStore = createStore(questionChangeTitle);
 export const qDescribeStore = createStore(questionChangeDescribe);
@@ -13,3 +13,4 @@ export const subjectNameStore = createStore(subjectName)
 export const collegeStore = createStore(college)
 export const subjectInfoStore = createStore(subjectInfo)
 export const subjectNoteStore = createStore(subjectNote)
+export const subjectIconStore = createStore(subjectIcon)

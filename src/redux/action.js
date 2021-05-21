@@ -76,6 +76,12 @@ export const subjectNote = (value) => (
         value
     }
 )
+export const subjectIcon = (value) => (
+    {
+        type:'',
+        value
+    }
+)
 
 
 

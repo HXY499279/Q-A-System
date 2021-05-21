@@ -8,7 +8,7 @@ import {reqGetAllCollege,reqListSubject,reqDeleteSubject,reqAddSubject,reqUpdate
 //?引入localstorage模块
 import storageUtils from '@/utils/storageUtils'
 //?引入redux
-import {subjectIdStore,subjectNameStore,collegeStore,subjectInfoStore,subjectNoteStore} from '@/redux/store'
+import {subjectIdStore,subjectNameStore,collegeStore,subjectInfoStore,subjectNoteStore,subjectIconStore} from '@/redux/store'
 
 import {subjectId} from '@/redux/action'
 import EditSubject from './edit-subject'
@@ -17,7 +17,7 @@ const { Option } = Select;
 export default class Subject extends Component {
     state = {
       adminId:null,
-      pageSize:11,
+      pageSize:1,
       total:null,
       subjectName:null,
       college:null,
@@ -106,15 +106,19 @@ export default class Subject extends Component {
     this.setState({subjectIsModalVisible:true})
     console.log(e)
     console.log('我点击了修改学科')
+
    }
    changeEdit = () => {
+     console.log("我点击了OK")
+     console.log(subjectIconStore.getState().arrayBuffer())
     let param = {
       subjectId:subjectIdStore.getState(),
       subjectName:subjectNameStore.getState(),
       college:collegeStore.getState(),
       subjectInfo:subjectInfoStore.getState(),
       note:subjectNoteStore.getState(),
-      adminId:this.state.adminId
+      adminId:this.state.adminId,
+      icon:subjectIconStore.getState().arrayBuffer()
 
     }
     reqUpdateSubject(param)
@@ -135,13 +139,27 @@ export default class Subject extends Component {
       this.setState({subjectAddIsModalVisible:true})
      }
      addEdit = () => {
+      console.log("add")
+     
+      console.log(subjectIconStore.getState())
+      const obj = subjectIconStore.getState()
+      const formData = new FormData();
+      Object.keys(obj)
+      // subjectIconStore.getState().keys(obj)
+      .forEach(key => {
+        console.log(key)
+        console.log(obj[key])
+          // formData.append(key, obj[key]);
+      });
+      console.log(formData)
+      // console.log(subjectIconStore.getState().arrayBuffer())
       let param = {
         subjectName:subjectNameStore.getState(),
         college:collegeStore.getState(),
         subjectInfo:subjectInfoStore.getState(),
         note:subjectNoteStore.getState(),
-        adminId:this.state.adminId
-
+        adminId:this.state.adminId,
+        icon:subjectIconStore.getState()
       }
       reqAddSubject(param)
       .then(res=>{
@@ -211,7 +229,7 @@ export default class Subject extends Component {
                           <Select  style={{ width: 200 }} onChange={this.handleChange}>
                             {collegeData.map((obj) => {
                               return(
-                                <Option value={obj}>{obj}</Option>
+                                <Option key={obj} value={obj}>{obj}</Option>
                               ) 
                             })}
                           </Select>
