@@ -1,89 +1,291 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import AdminTopbar from "../../../components/admin-topbar";
+//?引入localstorage模块
+import storageUtils from '@/utils/storageUtils'
 //? antd
-import { Table, Input, Button, DatePicker} from 'antd';
+import { Table, Input, Button, DatePicker,Select,Space,message} from 'antd';
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
+import {reqListNews,reqAddNews,reqDeleteNewsById,reqUpdateNews,reqGetNews} from '@/api/index'
 import './index.less'
 const { TextArea } = Input;
+const { Option } = Select;
 export default class Message extends Component {
     state = {
-        msgDataSource:[
-            {
-                index: '01',
-                title: '开学季，迎新生',
-                author: 'aqiuya',
-                time: '2020-1-20',
-                pageView: '489',
-            }
-        ]
+        adminId:null,
+        timeType:"year",
+        newsId:null,
+        pageSize:3,
+        total:null,
+        title:null,
+        adminName:null,
+        publishTime:null,
+        content:null,
+        msgDataSource:[]
     }
-    //? 时间选择器回调函数
-    onChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
-      }
-    onOk = (value) => {
-        console.log('onOk: ', value);
-      }
+    componentDidMount = () => {
+        this.setState({adminId:storageUtils.getUser().adminId})
+        let param = {
+            currentPage:1,
+            pageSize:this.state.pageSize
+        }
+        
+        this.initMsgTable(param)
+    }
 
-      //?修改编辑的回调函数
-      showEditMsg = (e) => {
-        console.log(e)
-        console.log('我点击了修改资讯')
-      }
+    async initMsgTable (param) {
+        const res = await reqListNews(param);
+        const {list} = res.data;
+        const {totalRows} = res.data.pageInfo
+        this.setState({msgDataSource:list,total:totalRows})
+    }
+
+ 
+    //?监听输入框的值
+    titleSearch = (e) => {
+        //   console.log(e.target.value)
+        //   console.log(e)
+          if(e.target.value == ""){
+              this.setState({
+                title: null
+              })
+          }else{
+            this.setState({
+                title: e.target.value
+            })
+          }
+            
+        }
+       
+        authodSearch = (e) => {
+        //   console.log(e.target.value)
+        //   console.log(e)
+          if(e.target.value == ""){
+              this.setState({
+                adminName: null
+              })
+          }else{
+            this.setState({
+                adminName: e.target.value
+            })
+          }
+            
+        }
+        txtSearch = (e) => {
+        //   console.log(e.target.value)
+        //   console.log(e)
+          if(e.target.value == ""){
+              this.setState({
+                content: null
+              })
+          }else{
+            this.setState({
+                content: e.target.value
+            })
+          }
+            
+        }
+
+        //? 时间选择器回调函数
+        onChange = (date, dateStrings) => {
+            console.log(dateStrings)
+            if(dateStrings == '') {
+                this.setState({
+                    publishTime:null
+                })
+            }else{
+                this.setState({
+                    publishTime:dateStrings
+                })
+            }  
+        }
+
+     
 
       //?查看资讯详情的回调函数
-      goMsgDetail = (e) => {
-          console.log(e)
+    //   goMsgDetail = (e) => {
+    //       console.log(e)
+    //   }
+
+    //?实现分页
+    handleChangeMsg= (value) =>{
+        console.log(value)
+        const {title,adminName,publishTime} = this.state;
+        let param = {
+            currentPage:value.current,
+            pageSize:value.pageSize,
+            title,
+            adminName,
+            publishTime
+        }
+
+        this.initMsgTable(param)
+    }
+    //?实现搜索
+    search = () => {
+        const {title,adminName,publishTime,pageSize} = this.state;
+        let param = {
+            currentPage:1,
+            pageSize,
+            title,
+            adminName,
+            publishTime
+        }
+
+        this.initMsgTable(param)
+    }
+    //?发布资讯
+    publish = () => {
+        const { title,
+            content,
+            adminId} = this.state
+        let param = {
+            title,
+            content,
+            adminId
+        }
+        reqAddNews(param)
+        .then(res=>{
+            console.log(res)
+            if(res.code == 1) {
+                message.success("发布资讯成功！")
+                this.setState({
+                    title:null,
+                    content:null,
+                    adminName:null
+                })
+            }
+            this.search()
+        })
+    }
+     //?修改编辑的回调函数
+     showEditMsg = (e) => {
+         let _this = this;
+         let param = {
+            newsId:e
+         }
+         reqGetNews(param)
+        .then(res=>{
+            if(res.code == 1){
+                message.success("请查看上方咨询编辑")
+                let {title,
+                    content,
+                    adminName} = res.data
+                console.log(res)
+                this.setState({
+                    title,
+                    content,
+                    adminName,
+                    newsId:e
+                })
+            }
+        
+        })
+        
       }
+      //?确定修改
+      update = () => {
+        const {title,
+            content,
+            adminName,
+            adminId,
+            newsId} = this.state
+        let param = {
+            newsId,
+            title,
+            content,
+            adminName,
+            adminId
+        }
+        reqUpdateNews(param)
+        .then(res=>{
+            if(res.code == 1){
+                message.success("修改成功！")
+                this.setState({
+                    title:null,
+                    content:null,
+                    adminName:null,
+                })
+            }
+            console.log(res)
+            this.search()
+        })
+      }
+      //?删除资讯
+      deleteMsg = (e) => {
+        let param = {
+            adminId:this.state.adminId,
+            newsId:e
+        }
+        reqDeleteNewsById(param)
+        .then(res=>{
+            console.log(res)
+            if(res.code == 1) {
+                message.success("成功删除资讯！")
+                this.search()
+            }
+        })
+      }
+
+    
     render() {
         const msgColumns = [
             {
-                title: '序号',
-                dataIndex: 'index',
-                width: '7%',
-                align: 'center'
-              },
-            {
                 title: '标题',
                 dataIndex: 'title',
-                render: (text) => (<Link to="/admin/messageDetail" onClick={(e) => this.goMsgDetail(e)}>{text}</Link>),
+                width: '10%',
+                align: 'center'
+              },
+              {
+                title: '内容',
+                dataIndex: 'content',
                 align: 'center'
               },
               {
                 title: '浏览量',
-                dataIndex: 'pageView',
+                dataIndex: 'readCount',
                 width: '7%',
                 align: 'center'
               },
               {
                 title: '作者',
-                dataIndex: 'author',
+                dataIndex: 'adminName',
                 width: '10%',
                 align: 'center'
               },
               {
+                title: '发布时间',
+                dataIndex: 'publishTime',
+                width: '15%',
+                align: 'center'
+              },
+              {
                 title: '操作',
-                dataIndex: '',
+                dataIndex: 'newsId',
                 width: '10%',
-                render: (e) => (<><a onClick={(e) => this.showEditMsg(e)}>修改</a> <a>删除</a></>),
+                render: (newsId) => (<>{/*<Link to="/admin/messageDetail" onClick={() => this.goMsgDetail(newsId)}>查看 </Link>*/}<a onClick={() => this.showEditMsg(newsId)}>修改</a> <a onClick={() => this.deleteMsg(newsId)}>删除</a></>),
                 align: 'center'
               }
         ];
+        const {title,
+            adminName,
+            content,
+            timeType} = this.state
         return (
             <div>
                 <div className="msg-edit">
                     <AdminTopbar tag="资讯编辑" timeShow='false' />
                     <div className="msg-edit-content">
                         <ul>
-                            <li>标题：<Input style={{width:600}}/></li>
-                            <li>作者：<Input style={{width:180}}/></li>
-                            <li><div>正文：</div><TextArea autoSize style={{width:'90%',margin:'-20px 0px 0px 40px'}}/></li>
+                            <li>标题：<Input value={title} onChange={ e => this.titleSearch(e) } style={{width:600}}/></li>
+                            <li>作者：<Input value={adminName} onChange={ e => this.authodSearch(e) } style={{width:180}}/></li>
+                            <li><div>正文：</div><TextArea value={content} onChange={ e => this.txtSearch(e) } autoSize style={{width:'90%',margin:'-20px 0px 0px 40px'}}/></li>
                         </ul>
                         <div style={{textAlign:"center",padding:'30px'}}>
-                            <Button type="primary">发布</Button>
+                            <Button type="primary" onClick={this.publish}>发布 </Button> &nbsp;
+                            <Button type="primary" onClick={this.update}> 修改</Button>
                         </div>
+                       
                             
                     </div>
                 </div>
@@ -91,14 +293,26 @@ export default class Message extends Component {
                     <AdminTopbar tag="资讯列表" timeShow='false' />
                     <div className="msg-search-top">
                         <ul>
-                            <li>标题：<Input style={{width:200}}/></li>
-                            <li>发布者：<Input style={{width:200}}/></li>
-                            <li>时间：<DatePicker showTime onChange={this.onChange} onOk={this.onOk}/></li>  
+                            <li>标题：<Input onChange={ e => this.titleSearch(e) }  style={{width:200}}/></li>
+                            <li>发布者：<Input onChange={ e => this.authodSearch(e) } style={{width:200}}/></li>
+                            <li>时间：
+                                <Space>
+                                            <Select defaultValue={timeType} onChange={this.setType}>
+                                                <Option value="date">Date</Option>
+                                                <Option value="month">Month</Option>
+                                                <Option value="year">Year</Option>
+                                            </Select>
+                                            
+                                            <DatePicker picker={timeType} onChange={this.onChange} />
+                                </Space>
+                            </li>  
                         </ul>
                         <ul>
-                            <Button type="primary" icon={<SearchOutlined />}>
+                            <li>
+                            <Button type="primary" onClick={this.search} icon={<SearchOutlined />}>
                                 搜索
                             </Button>
+                            </li>
                             <a href="http://202.202.43.250:8080/admin/exportExcel?type=3">
                                 <Button type="primary" icon={<DownloadOutlined />}>
                                     导出
@@ -110,10 +324,11 @@ export default class Message extends Component {
                     <Table 
                     bordered
                     align="center"
-                    pagination={{ pageSize: 10 }} 
+                    onChange={this.handleChangeMsg}
+                    pagination={{ "pageSize": this.state.pageSize }}  
                     dataSource={this.state.msgDataSource}
                     columns={msgColumns} 
-                    rowKey="index"/>
+                    rowKey="newsId"/>
                     </div>
                          
                 </div>

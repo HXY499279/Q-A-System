@@ -16,14 +16,8 @@ export default function ajax(url, params={}, type="GET") {
 
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-
-
     return new Promise((resolve,reject) => {
-        let promise;
-
-      
-
-        
+        let promise;        
         //?执行异步 ajax 请求
         if (type === "GET") {
             promise = axios.get(url,{

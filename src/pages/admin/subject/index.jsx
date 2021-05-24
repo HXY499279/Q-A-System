@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { Component } from 'react'
 import './index.less'
 import AdminTopbar from "../../../components/admin-topbar";
@@ -139,35 +140,69 @@ export default class Subject extends Component {
       this.setState({subjectAddIsModalVisible:true})
      }
      addEdit = () => {
+
       console.log("add")
-     
       console.log(subjectIconStore.getState())
-      const obj = subjectIconStore.getState()
-      const formData = new FormData();
-      Object.keys(obj)
-      // subjectIconStore.getState().keys(obj)
-      .forEach(key => {
-        console.log(key)
-        console.log(obj[key])
-          // formData.append(key, obj[key]);
-      });
-      console.log(formData)
-      // console.log(subjectIconStore.getState().arrayBuffer())
-      let param = {
-        subjectName:subjectNameStore.getState(),
-        college:collegeStore.getState(),
-        subjectInfo:subjectInfoStore.getState(),
-        note:subjectNoteStore.getState(),
-        adminId:this.state.adminId,
-        icon:subjectIconStore.getState()
-      }
-      reqAddSubject(param)
+      let formData = new FormData();
+      formData.append('icon',subjectIconStore.getState());
+      formData.append('subjectName', subjectNameStore.getState())
+      formData.append('college', collegeStore.getState())
+      formData.append('subjectInfo', subjectInfoStore.getState())
+      formData.append('note', subjectNoteStore.getState())
+      formData.append('adminId', this.state.adminId)
+      axios({
+        method: 'post',
+        url: "/admin/addSubject",
+        headers: { 'Content-type': 'multipart/form-data;charset=UTF-8' },
+        data: formData
+      })
       .then(res=>{
         console.log(res)
+        if(1 == res.code){
+          message.success("成功添加学科！")
+          this.searchSubject()
+        }
       })
-
-      console.log("我点击了添加学科")
+      // const file = subjectIconStore.getState()
+      // var reader = new FileReader();
+      // reader.readAsBinaryString(file);  
+      // let binary
+      // reader.onload = function(){
+      //  binary = this.result;
+      // }
+      // const {lastModified,lastModifiedDate,name,size,type,uid} = obj
+      // console.log(lastModified)
+      // let formData = new FormData()
+      // formData.append("lastModifiedDate", lastModifiedDate);
+      // formData.append("name", name);
+      // formData.append("size", size);
+      // formData.append("type", type);
+      // formData.append("uid", uid);
+      // Object.keys(obj)
+      // .forEach(key => {
+      //   console.log(key)
+      //   console.log(obj[key])
+      //     formData.append(key, obj[key]);
+      // });
+      
+      // console.log(subjectIconStore.getState().arrayBuffer())
+      // let param = {
+      //   icon:subjectIconStore.getState(),
+      //   subjectName:subjectNameStore.getState(),
+      //   college:collegeStore.getState(),
+      //   subjectInfo:subjectInfoStore.getState(),
+      //   note:subjectNoteStore.getState(),
+      //   adminId:this.state.adminId,
+        
+      // }
+      // console.log(param)
+      // reqAddSubject(param)
+      // .then(res=>{
+      //   console.log(res)
+      // })
       this.setState({subjectAddIsModalVisible:false})
+      // console.log("我点击了添加学科")
+      
       }
       cancelAddEdit = () => {
 

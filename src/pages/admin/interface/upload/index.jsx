@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 
-import { Upload, Modal } from 'antd';
+import { Upload, Modal,message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import {reqListStaticImg} from '@/api/index'
 
+//?引入localstorage模块
+import storageUtils from '@/utils/storageUtils'
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -14,20 +17,30 @@ function getBase64(file) {
   }
 export default class UploadImg extends Component {
     state = {
+        imgId:null,
         previewVisible: false,
         previewImage: '',
         previewTitle: '',
-        fileList: [
-          {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-        ],
+        fileList: [],
       };
       componentDidMount () {
-        console.log(this.props.num)
+        let fileList =[]
+        reqListStaticImg()
+        .then(res=>{
+          console.log(res)
+          const {list} = res.data;
+          console.log(list.length)
+          for(let i = 0; i < list.length;i++) {
+            if(list[i].imgType == this.props.type) {
+              list[i].url = "http://202.202.43.250:8080/img"+list[i].url
+              fileList.push(list[i])
+            }
+          }
+          this.setState({fileList})
+          console.log(fileList)
+        })
+        
+       
       }
       handleCancel = () => this.setState({ previewVisible: false });
 
@@ -43,24 +56,43 @@ export default class UploadImg extends Component {
         });
       };
     
-      handleChange = ({ fileList }) => this.setState({ fileList });
+      handleChange = ({file, fileList }) => {
+        console.log("看看有没有imgid")
+        console.log(file)
+        const {imgId} = file
+        this.setState({imgId})
+        this.setState({ fileList });
+        if(file.status == 'done'){
+          message.success("修改图片成功！")
+        }
+      }
     render() {
-        const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+        const { previewVisible, previewImage, fileList, previewTitle,imgId } = this.state;
         const uploadButton = (
         <div>
             <PlusOutlined />
             <div style={{ marginTop: 8 }}>Upload</div>
         </div>
         );
+        const type = this.props.type;
         const num = this.props.num;
+        const adminId = storageUtils.getUser().adminId
+        let paramData = {
+          adminId,
+          imgId,
+          type
+        }
         return (
             <div>
             <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            action="/admin/updateStaticImg"
+            name='img'
+            data={paramData}
             listType="picture-card"
             fileList={fileList}
             onPreview={this.handlePreview}
             onChange={this.handleChange}
+            // key={fileList}
             >
             {fileList.length >= num ? null : uploadButton}
             </Upload>

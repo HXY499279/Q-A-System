@@ -142,7 +142,7 @@ export default class EditSubject extends Component {
       beforeUpload (file, fileList) {
         console.log("上传前")
         console.log(file)
-        // subjectIconStore.dispatch(subjectIcon(file))
+        subjectIconStore.dispatch(subjectIcon(file))
       }
     handleCancel = () => this.setState({ previewVisible: false });
 
@@ -158,8 +158,18 @@ export default class EditSubject extends Component {
       });
     };
     handleChange = ({file, fileList }) => {
-      subjectIconStore.dispatch(subjectIcon(file))
-      console.log(file)
+      // subjectIconStore.dispatch(subjectIcon(file))
+      // console.log(file)
+      // const {lastModified,lastModifiedDate,name,size,type,uid} = file
+      // let formData = new FormData()
+      // formData.append("lastModified", lastModified);
+      // formData.append("lastModifiedDate", lastModifiedDate);
+      // formData.append("name", name);
+      // formData.append("size", size);
+      // formData.append("type", type);
+      // formData.append("uid", uid);
+      // console.log(formData)
+      // subjectIconStore.dispatch(subjectIcon(formData))
       // getBase64(file)
       // .then(res=>{
       //   console.log("我想转换为2进制")
