@@ -37,7 +37,7 @@ export default class EditQuestion extends Component {
             const res = await reqGetQuestionById ({questionId})
             console.log(res);
             let {title,describes,imgpath,publishTime,updateTime,imgPath} = res.data;
-            imgPath = 'http://202.202.43.250:8080/img/' + imgPath;
+            imgPath = 'https://xscqa.cqupt.edu.cn/question/img/' + imgPath;
             const fileList = [{url:imgPath}]
             this.setState({
               title,
@@ -81,7 +81,6 @@ export default class EditQuestion extends Component {
       })
       
       qTitleStore.dispatch(questionChangeTitle(e.target.value));
-      console.log("redux")
       console.log(qTitleStore.getState());
 
     }
@@ -113,18 +112,22 @@ export default class EditQuestion extends Component {
           questionId:qID.getState(),
           adminId:storageUtils.getUser().adminId
         }
+        let {title,describes} = this.state;
+        
+        describes = describes.replace(/&nbsp;/ig, ' ');
+        describes = describes.replace(/\\n/gi,'\n')
         return (
             <>
                     <ul style={ulStyle}>
                       <span style={spanStyle}>标题：</span>
-                      <TextArea onChange={ e => this.titleTxtChanged(e)} autoSize value={this.state.title}/>
+                      <TextArea onChange={ e => this.titleTxtChanged(e)} autoSize value={title}/>
                     </ul>
                     <ul style={{
                       display:'flex',
                       justifyContent:"space-between"
                     }}>
                       <span style={spanStyle}>描述：</span>
-                       <TextArea autoSize onChange={ e => this.describeTxtChanged(e)} value={this.state.describes} />
+                       <TextArea autoSize onChange={ e => this.describeTxtChanged(e)} value={describes} />
                     </ul>
                     <ul style={ulStyle}>
                        <span  style={spanStyle}>图片：</span>

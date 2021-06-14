@@ -25,7 +25,7 @@ export default class ProfileMsg extends Component {
         if(res.code == 1){
             const {imgPath,userName,role,introduce,questionCount,answerCount,agreeCount,collectionCount,solveCount,score} = res.data;
             this.setState({
-                imgPath: "http://202.202.43.250:8080/img" + imgPath,
+                imgPath: "https://xscqa.cqupt.edu.cn/question/img" + imgPath,
                 userName,
                 role,
                 introduce,

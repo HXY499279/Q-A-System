@@ -18,7 +18,7 @@ const { Option } = Select;
 export default class Subject extends Component {
     state = {
       adminId:null,
-      pageSize:1,
+      pageSize:10,
       total:null,
       subjectName:null,
       college:null,
@@ -277,7 +277,7 @@ export default class Subject extends Component {
                         <Button type="primary" style={{marginLeft:30}} onClick={(e) => this.showAddSubject(e)}>
                           + 添加
                         </Button>   
-                        <a href="http://202.202.43.250:8080/admin/exportExcel?type=4">
+                        <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=4">
                           <Button type="primary" icon={<DownloadOutlined />} style={{marginLeft:30}}>
                               导出
                           </Button>  

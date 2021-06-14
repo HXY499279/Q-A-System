@@ -39,7 +39,7 @@ export default class QuestionDetail extends Component {
             <div className="question-detail">
                 <AdminTopbar tag="问题详情" timeShow="false"/>
                 <div className="question-detail-content">
-                    <h1>{describes}</h1>
+                    <h1 dangerouslySetInnerHTML = {{__html:describes}}></h1>
                     <hr/>
                     {
                         this.state.questionDetail.map(obj => {
@@ -48,7 +48,7 @@ export default class QuestionDetail extends Component {
                                     <div className="answer-content">
                                         <Avatar
                                         size={60}
-                                        src={<Image src={"http://202.202.43.250:8080/img" + obj.userImg} />}
+                                        src={<Image src={"https://xscqa.cqupt.edu.cn/question/img" + obj.userImg} />}
                                         />
                                         <ul className="answer-content-ul">
                                             <li>
@@ -62,7 +62,10 @@ export default class QuestionDetail extends Component {
                                                 {obj.answerTime}
                                             </li>
                                         </ul>
-                                        <ul>回答：{obj.content}</ul>
+                                        <ul>
+                                            <span>回答：</span>
+                                            <span dangerouslySetInnerHTML = {{__html:obj.content}}></span>
+                                        </ul>
                                     </div>
                                     <hr/>
                                     {
@@ -71,7 +74,7 @@ export default class QuestionDetail extends Component {
                                                 <div className="comments" key={commentObj.commentId}>
                                                     <Avatar
                                                     size={40}
-                                                    src={<Image src={"http://202.202.43.250:8080/img" + commentObj.userImg}  />}
+                                                    src={<Image src={"https://xscqa.cqupt.edu.cn/question/img" + commentObj.userImg}  />}
                                                     />
                                                     <ul className="comments-content-ul">
                                                         <li>
@@ -85,7 +88,9 @@ export default class QuestionDetail extends Component {
                                                             {commentObj.commentTime}
                                                         </li>
                                                     </ul>
-                                                    <ul>评论内容：{commentObj.content}</ul>
+                                                    <ul>
+                                                        <span>评论内容：</span>
+                                                        <span dangerouslySetInnerHTML = {{__html:commentObj.content}}></span></ul>
                                                 </div>
                                                         )
                                                     })

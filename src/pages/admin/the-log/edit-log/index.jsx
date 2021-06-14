@@ -30,8 +30,8 @@ export default class EditLog extends Component {
                 <ul>
                     <li>账户：{adminName}</li>
                     <li>动作：{type == 1 ? "增加" : type == 2 ? "删除" : type == 3 ? "修改" : "无" }</li>
-                    <li>动作内容：{content}</li>
-                    <img src={"http://202.202.43.250:8080"+imgPath}  />
+                    <li><span>动作内容：</span><span dangerouslySetInnerHTML={{__html:content}}></span></li>
+                    <img src={"https://xscqa.cqupt.edu.cn/question/"+imgPath}  />
                     <li>IP地址：{ip}</li>
                     <li>时间：{logTime}</li>
                 </ul>

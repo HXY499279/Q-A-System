@@ -14,7 +14,7 @@ const { Option } = Select;
 export default class Log extends Component {
     state = {
         timeType:"year",
-        pageSize:3,
+        pageSize:10,
         total:null,
         logName:null,
         logTime:null,
@@ -153,6 +153,7 @@ export default class Log extends Component {
               },
               {
                 title: '动作内容',
+                render:text=>(<p dangerouslySetInnerHTML={{__html:text.substring(0,20)+"..."}}></p>),
                 dataIndex: 'content',
                 align: 'center'
               },
@@ -205,7 +206,7 @@ export default class Log extends Component {
                             搜索
                         </Button>
                         </li>
-                        <a href="http://202.202.43.250:8080/admin/exportExcel?type=7">
+                        <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=7">
                             <Button type="primary" icon={<DownloadOutlined />}>
                               导出
                             </Button>

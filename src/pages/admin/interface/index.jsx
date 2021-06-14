@@ -13,7 +13,7 @@ export default class Interface extends Component {
                    <div className="img-content-part1">
                         <div>
                             <div className="title">轮播图管理：</div>
-                            <UploadImg num='3' type="1"/>
+                            <UploadImg num='2' type="1"/>
                         </div>
                         <div>
                             <div className="title" >系统默认头像：</div>

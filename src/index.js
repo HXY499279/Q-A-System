@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter,HashRouter} from 'react-router-dom';
 import App from './App';
 
 // import 'common/styles/reset.css'
@@ -13,11 +13,11 @@ import memoryUtils from './utils/memoryUtils'
 memoryUtils.user = storageUtils.getUser();
 
 ReactDOM.render(
-    <BrowserRouter>
+    <HashRouter>
     {/* <React.StrictMode> */}
         <App/>
     {/* </React.StrictMode> */}
-    </BrowserRouter>,
+    </HashRouter>,
     document.getElementById('root')
 )
 

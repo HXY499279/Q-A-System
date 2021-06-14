@@ -16,7 +16,7 @@ export default class User extends Component {
         role:null,
         newRole:null,
         subjectId:null,
-        pageSize:1,
+        pageSize:10,
         total:null,
         type: storageUtils.getUser().type,
         userDataSource: [],
@@ -229,7 +229,7 @@ export default class User extends Component {
                             搜索
                         </Button>
                         </li>
-                        <a href="http://202.202.43.250:8080/admin/exportExcel?type=2">
+                        <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=2">
                             <Button type="primary" icon={<DownloadOutlined />}>
                                 导出
                             </Button>

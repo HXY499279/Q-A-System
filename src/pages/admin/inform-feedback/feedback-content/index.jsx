@@ -54,7 +54,7 @@ export default class FeedbackContent extends Component {
                         </li>
                     </ul>
                     <ul>详情：{feedbackContent}</ul>
-                    <img src={"http://202.202.43.250:8080/img"+feedbackImage} style={{width:"100%"}} alt="" />
+                    <img src={"https://xscqa.cqupt.edu.cn/question/img"+feedbackImage} style={{width:"100%"}} alt="" />
                </div>
         )
     }

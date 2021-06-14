@@ -20,7 +20,7 @@ export default class Feedback extends Component {
     state = {
         adminId:null,
         timeType:"year",
-        pageSize:3,
+        pageSize:5,
         state:null,
         time:null,
         informIsModalVisible: false,
@@ -57,7 +57,7 @@ export default class Feedback extends Component {
     //?举报列表请求
     async initInformTable (param) {
         const res = await reqListReport(param);
-        // console.log(res)
+        console.log(res)
         const {list} = res.data;
         const {totalRows} = res.data.pageInfo
         this.setState({informDataSource:list,informTotal:totalRows})
@@ -65,7 +65,7 @@ export default class Feedback extends Component {
     //?反馈列表请求
     async initFeedbackTable (param) {
         const res = await reqListFeedback(param);
-        console.log(res)
+        // console.log(res)
         const {list} = res.data;
         const {totalRows} = res.data.pageInfo
         this.setState({feedbackDataSource:list,feedbackTotal:totalRows})
@@ -355,6 +355,7 @@ export default class Feedback extends Component {
             {
                 title: '举报内容',
                 dataIndex: 'content',
+                render:text=>(<p>{text.substring(0,8)+"..."}</p>),
                 align: 'center'
               },
               {
@@ -400,6 +401,7 @@ export default class Feedback extends Component {
             {
                 title: '反馈内容',
                 dataIndex: 'content',
+                render:text=>(<p>{text.substring(0,8)+"..."}</p>),
                 align: 'center'
               },
               {
@@ -478,7 +480,7 @@ export default class Feedback extends Component {
                                 </Button>
                             </ul>
                             <ul>
-                                <a href="http://202.202.43.250:8080/admin/exportExcel?type=5">
+                                <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=5">
                                     <Button type="primary" icon={<DownloadOutlined />}>
                                         导出
                                     </Button>
@@ -537,7 +539,7 @@ export default class Feedback extends Component {
                                 </Button>
                             </ul>
                             <ul>
-                                <a href="http://202.202.43.250:8080/admin/exportExcel?type=6">
+                                <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=6">
                                     <Button type="primary" icon={<DownloadOutlined />}>
                                         导出
                                     </Button>

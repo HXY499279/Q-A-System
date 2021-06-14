@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import { Upload, Modal,message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import {reqListStaticImg} from '@/api/index'
@@ -22,8 +21,10 @@ export default class UploadImg extends Component {
         previewImage: '',
         previewTitle: '',
         fileList: [],
+        
       };
       componentDidMount () {
+        
         let fileList =[]
         reqListStaticImg()
         .then(res=>{
@@ -32,7 +33,7 @@ export default class UploadImg extends Component {
           console.log(list.length)
           for(let i = 0; i < list.length;i++) {
             if(list[i].imgType == this.props.type) {
-              list[i].url = "http://202.202.43.250:8080/img"+list[i].url
+              list[i].url = "https://xscqa.cqupt.edu.cn/question/img"+list[i].url
               fileList.push(list[i])
             }
           }
@@ -82,6 +83,7 @@ export default class UploadImg extends Component {
           imgId,
           type
         }
+        
         return (
             <div>
             <Upload
@@ -92,7 +94,7 @@ export default class UploadImg extends Component {
             fileList={fileList}
             onPreview={this.handlePreview}
             onChange={this.handleChange}
-            // key={fileList}
+            key={Math.floor(Math.random() * 10000)}
             >
             {fileList.length >= num ? null : uploadButton}
             </Upload>

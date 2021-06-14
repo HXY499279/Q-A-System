@@ -65,7 +65,7 @@ export default class EditSubject extends Component {
             console.log(res)
             const {college,note,subjectInfo,subjectName} = res.data
             let {iconPath} = res.data
-            iconPath = 'http://202.202.43.250:8080/img/' + iconPath;
+            iconPath = 'https://xscqa.cqupt.edu.cn/question/img/' + iconPath;
             const fileList = [{url:iconPath}]
             // console.log(college)
             this.setState({
@@ -235,7 +235,7 @@ export default class EditSubject extends Component {
                         footer={null}
                         onCancel={this.handleCancel}
                         >
-                        <img alt="example" style={{ width: '100%' }} src={'http://202.202.43.250:8080/img'+iconPath} />
+                        <img alt="example" style={{ width: '100%' }} src={'https://xscqa.cqupt.edu.cn/question/img'+iconPath} />
                         </Modal>
                     </ul>
                     <ul style={ulStyle}>

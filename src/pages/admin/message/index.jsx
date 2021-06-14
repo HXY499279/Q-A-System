@@ -15,7 +15,7 @@ export default class Message extends Component {
         adminId:null,
         timeType:"year",
         newsId:null,
-        pageSize:3,
+        pageSize:4,
         total:null,
         title:null,
         adminName:null,
@@ -136,14 +136,17 @@ export default class Message extends Component {
     }
     //?发布资讯
     publish = () => {
-        const { title,
+        let { title,
             content,
-            adminId} = this.state
+            adminId} = this.state;
+        content = content.replace(/[\n]/g,"\\n");
+        content = content.replace(/[ ]/g,'&nbsp;');
         let param = {
             title,
-            content,
-            adminId
+            adminId,
+            content
         }
+        
         reqAddNews(param)
         .then(res=>{
             console.log(res)
@@ -171,6 +174,8 @@ export default class Message extends Component {
                 let {title,
                     content,
                     adminName} = res.data
+                    content = content.replace(/&nbsp;/ig, ' ');
+                    content = content.replace(/\\n/gi,'\n')
                 console.log(res)
                 this.setState({
                     title,
@@ -190,6 +195,8 @@ export default class Message extends Component {
             adminName,
             adminId,
             newsId} = this.state
+            content = content.replace(/[\n]/g,"\\n");
+            content = content.replace(/[ ]/g,'&nbsp;');
         let param = {
             newsId,
             title,
@@ -239,6 +246,9 @@ export default class Message extends Component {
               {
                 title: '内容',
                 dataIndex: 'content',
+                // render:text=>(<p>{text.substring(0,35)+"..."}</p>),
+
+                render:text=>(<p dangerouslySetInnerHTML = {{__html:text.substring(0,35)+"..."}} ></p>),
                 align: 'center'
               },
               {
@@ -313,7 +323,7 @@ export default class Message extends Component {
                                 搜索
                             </Button>
                             </li>
-                            <a href="http://202.202.43.250:8080/admin/exportExcel?type=3">
+                            <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=3">
                                 <Button type="primary" icon={<DownloadOutlined />}>
                                     导出
                                 </Button>
@@ -325,7 +335,7 @@ export default class Message extends Component {
                     bordered
                     align="center"
                     onChange={this.handleChangeMsg}
-                    pagination={{ "pageSize": this.state.pageSize }}  
+                    pagination={{ "pageSize": this.state.pageSize,"total":this.state.total }} 
                     dataSource={this.state.msgDataSource}
                     columns={msgColumns} 
                     rowKey="newsId"/>

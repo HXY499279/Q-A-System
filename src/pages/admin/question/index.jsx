@@ -215,11 +215,13 @@ export default class Question extends Component {
     }
     //?确认修改问题
     handleEdit = (e) => {
+        let describes = qDescribeStore.getState();
+        describes = describes.replace(/[\n]/g,"\\n");
+        describes = describes.replace(/[ ]/g,'&nbsp;');
         let param = {
             questionId:qID.getState(),
             title:qTitleStore.getState(),
-            describes:qDescribeStore.getState(),
-            // img:qImgStore.getState(),
+            describes,
             adminId:storageUtils.getUser().adminId
         }
         reqUpdateQuestion(param)
@@ -275,17 +277,13 @@ export default class Question extends Component {
        const res = await reqDisapperQuestion(param);
        console.log(res)
 
-    }
-
-  
-    
-
-    
+    }    
     render() {
         const questionColumns = [
             {
                 title: '标题',
                 dataIndex: 'title',
+                render:(text)=>(<p>{text.substring(0,5)+"..."}</p>),
                 align: 'center'
               },
               {
@@ -380,7 +378,7 @@ export default class Question extends Component {
                             
                         </ul>
                         <ul>
-                            <a href="http://202.202.43.250:8080/admin/exportExcel?type=1">
+                            <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=1">
                                 <Button type="primary" icon={<DownloadOutlined />}>
                                     导出
                                 </Button>
@@ -397,7 +395,7 @@ export default class Question extends Component {
                 pagination={{ "pageSize": this.state.pageSize,"total":this.state.total }} 
                 dataSource={this.state.questionDataSource}
                 columns={questionColumns} 
-                rowKey="title"/>
+                rowKey="questionId"/>
                 </div>
                 <Modal footer={null} destroyOnClose title="用户信息" visible={profileIsModalVisible} onOk={this.handleProfile} onCancel={this.cancelProfile}>
                   <ProfileMsg/>
