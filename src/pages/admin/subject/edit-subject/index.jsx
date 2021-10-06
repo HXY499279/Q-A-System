@@ -28,13 +28,13 @@ function getBase64(file) {
 export default class EditSubject extends Component {
     state = {
         adminId:null,
-        college:null,
+        college1:null,
         iconPath:null,
         note:"",
         url:"123",
         subjectId:null,
-        subjectInfo:null,
-        subjectName:null,
+        subjectInfo1:null,
+        subjectName1:null,
         previewVisible: false,
         previewImage: '',
         previewTitle: '',
@@ -42,45 +42,47 @@ export default class EditSubject extends Component {
         img:null,
         fileList: [],
       };
+     
+
+
       componentDidMount = () => {
-        // if(this.props.type == "add"){
-        //   this.setState({
-        //     url:'/admin/addSubject'
-        //   })
-        // }else{
-        //   this.setState({
-        //     url:'/admin/updateSubject'
-        //   })
-        // }
+        const adminId = storageUtils.getUser().adminId
+         this.setState({
+           adminId,
+           subjectId:Number(subjectIdStore.getState())
+         })
         
-       const adminId = storageUtils.getUser().adminId
-        this.setState({
-          adminId,
-          subjectId:Number(subjectIdStore.getState())
-        })
-       
-        if(this.props.type == "change"){
-          reqGetSubjectById({subjectId:Number(subjectIdStore.getState())})
-          .then(res=>{
-            console.log(res)
-            const {college,note,subjectInfo,subjectName} = res.data
-            let {iconPath} = res.data
-            iconPath = 'https://xscqa.cqupt.edu.cn/question/img/' + iconPath;
-            const fileList = [{url:iconPath}]
-            // console.log(college)
-            this.setState({
-              college,iconPath,note,subjectInfo,subjectName,fileList
-            })
-          });
-        }
-        reqGetAllCollege()
-        .then(res=>{
-          console.log(res)
-          this.setState({
-            collegeData:res.data
-          })
-        })
-      }
+         if(this.props.type == "change"){
+           reqGetSubjectById({subjectId:Number(subjectIdStore.getState())})
+           .then(res=>{
+             console.log(res)
+             const college1 = res.data.college;
+             const subjectInfo1 = res.data.subjectInfo;
+             const subjectName1 = res.data.subjectName;
+             const {note} = res.data
+             let {iconPath} = res.data
+             iconPath = 'https://xscqa.cqupt.edu.cn/question/img/' + iconPath;
+             const fileList = [{url:iconPath}]
+             // console.log(college)
+             this.setState({
+               college1,iconPath,note,subjectInfo1,subjectName1,fileList
+             })
+             console.log("这下有了")
+             console.log(this.state.college1)
+             collegeStore.dispatch(college(this.state.college1));
+            subjectNameStore.dispatch(subjectName(this.state.subjectName1));
+            subjectInfoStore.dispatch(subjectInfo(this.state.subjectInfo1));
+            subjectNoteStore.dispatch(subjectNote(this.state.note));
+           });
+         }
+         reqGetAllCollege()
+         .then(res=>{
+           console.log(res)
+           this.setState({
+             collegeData:res.data
+           })
+         })
+       }
 
       //?监听学院变化
       handleCollegeChange = (e) => {
@@ -88,25 +90,26 @@ export default class EditSubject extends Component {
         if(e == ''){
           collegeStore.dispatch(college(null))
                 this.setState({
-                  college: null
+                  college1: null
                 })
             }else{
               collegeStore.dispatch(college(e))
                 this.setState({
-                  college:e
+                  college1:e
                 })
             }  
       }
       nameTxtChanged = (e) => {
+       
         if(e.target.value == ""){
           subjectNameStore.dispatch(subjectName(null))
           this.setState({
-            subjectName: null
+            subjectName1: null
           })
         }else{
           subjectNameStore.dispatch(subjectName(e.target.value))
           this.setState({
-              subjectName: e.target.value
+              subjectName1: e.target.value
           })
         }
       }
@@ -114,12 +117,12 @@ export default class EditSubject extends Component {
         if(e.target.value == ""){
           subjectInfoStore.dispatch(subjectInfo(null))
           this.setState({
-            subjectInfo: null
+            subjectInfo1: null
           })
         }else{
           subjectInfoStore.dispatch(subjectInfo(e.target.value))
           this.setState({
-              subjectInfo: e.target.value
+              subjectInfo1: e.target.value
           })
         }
 
@@ -158,23 +161,7 @@ export default class EditSubject extends Component {
       });
     };
     handleChange = ({file, fileList }) => {
-      // subjectIconStore.dispatch(subjectIcon(file))
-      // console.log(file)
-      // const {lastModified,lastModifiedDate,name,size,type,uid} = file
-      // let formData = new FormData()
-      // formData.append("lastModified", lastModified);
-      // formData.append("lastModifiedDate", lastModifiedDate);
-      // formData.append("name", name);
-      // formData.append("size", size);
-      // formData.append("type", type);
-      // formData.append("uid", uid);
-      // console.log(formData)
-      // subjectIconStore.dispatch(subjectIcon(formData))
-      // getBase64(file)
-      // .then(res=>{
-      //   console.log("我想转换为2进制")
-      //   console.log(res)
-      // })
+     
       this.setState({ fileList })
       if(file.status == 'done' && this.props.type == "add"){
         message.success("成功添加图标！")
@@ -190,14 +177,17 @@ export default class EditSubject extends Component {
           fileList,
           previewTitle,
           previewTitlesubjectName,
-          subjectName,
-          subjectInfo,
+          subjectName1,
+          subjectInfo1,
           subjectId,
           collegeData,
-          college,
+          college1,
           url,
           note,
           iconPath } = this.state;
+     
+          
+
         const uploadButton = (
         <div>
             <PlusOutlined />
@@ -240,11 +230,11 @@ export default class EditSubject extends Component {
                     </ul>
                     <ul style={ulStyle}>
                       <span style={spanStyle}>学科名称：</span>
-                      <TextArea autoSize onChange={ e => this.nameTxtChanged(e)} value={subjectName}/>
+                      <TextArea autoSize onChange={ e => this.nameTxtChanged(e)} value={subjectName1}/>
                     </ul>
                     <ul style={ulStyle}>
                       <span style={spanStyle}>所属学院：
-                          <Select  style={{ width: 200 }} onChange={this.handleCollegeChange} value={college} >
+                          <Select  style={{ width: 200 }} onChange={this.handleCollegeChange} value={college1} >
                             {collegeData.map((obj) => {
                               return(
                                 <Option key={obj} value={obj}>{obj}</Option>
@@ -259,7 +249,7 @@ export default class EditSubject extends Component {
                       justifyContent:"space-between"
                     }}>
                       <span style={spanStyle}>学科简介：</span>
-                       <TextArea autoSize onChange={ e => this.infoChanged(e)} value={subjectInfo}  />
+                       <TextArea autoSize onChange={ e => this.infoChanged(e)} value={subjectInfo1}  />
                     </ul>
                     <ul style={{
                       display:'flex',

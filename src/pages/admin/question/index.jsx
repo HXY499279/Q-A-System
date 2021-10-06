@@ -1,6 +1,7 @@
 import React, { Component,useState } from 'react'
 import {Link} from 'react-router-dom'
 
+import axios from 'axios'
 import AdminTopbar from "@/components/admin-topbar"
 
 //?引入用户信息组件
@@ -20,7 +21,7 @@ import storageUtils from '@/utils/storageUtils'
 //? antd
 import { Table, Modal, Input, Button, Select, DatePicker, message,Space} from 'antd';
 import {questionId,stuId} from '@/redux/action'
-import {qID,qTitleStore,qDescribeStore,stuIdStore} from '@/redux/store'
+import {qID,qTitleStore,qDescribeStore,stuIdStore,qImgStore} from '@/redux/store'
 
 
 
@@ -39,8 +40,9 @@ export default class Question extends Component {
         title:null ,
         subjectName:null,
         college:null,
-        questionAccountName:null,
+        questionAccountId:null,
         state:null,
+        hide:null,
         timeType:"year",
         time:null,
         answerAccountName:null
@@ -56,12 +58,18 @@ export default class Question extends Component {
         }
         this.initQuestionTable(param)
     }
-    async initQuestionTable (param) {
-        const res = await reqListQuestion(param);
-        console.log(res)
-        const {list} = res.data;
-        const {totalRows} = res.data.pageInfo
-        this.setState({questionDataSource:list,total:totalRows})
+     initQuestionTable = (param) => {
+        reqListQuestion(param)
+        .then(res=>{
+            console.log(res)
+            let list =res.data? res.data.list : [];
+            let totalRows =res.data? res.data.pageInfo.totalRows : 0
+            this.setState({questionDataSource:list,total:totalRows})
+        })
+        // const res = await reqListQuestion(param);
+        // console.log(res)
+        
+       
     }
 
       //?监听输入框的值
@@ -104,25 +112,14 @@ export default class Question extends Component {
         askSearch = (e) => {
             if(e.target.value == ""){
                 this.setState({
-                    questionAccountName: null
+                    questionAccountId: null
                 })
             }else{
                 this.setState({
-                    questionAccountName: e.target.value
+                    questionAccountId: e.target.value
                 })
             }  
         }
-        // answerSearch = (e) => {
-        //     if(e.target.value == ""){
-        //         this.setState({
-        //             answerAccountName: null
-        //         })
-        //     }else{
-        //         this.setState({
-        //             answerAccountName: e.target.value
-        //         })
-        //     }  
-        // }
 
 
     //?状态回调函数
@@ -138,6 +135,20 @@ export default class Question extends Component {
         }  
         console.log(`selected ${value}`);
        
+      }
+
+      //?是否隐藏回调函数
+      handleChangeHide = (value) => {
+        if(value == ''){
+            this.setState({
+                hide: null
+            })
+        }else{
+            this.setState({
+                hide:Number(value)
+            })
+        }  
+        console.log(`selected ${value}`);
       }
     //?设置时间选择器类型
       setType = (e) => {
@@ -164,16 +175,17 @@ export default class Question extends Component {
     // }
     //?实现搜索问题
     search = () => {
-        const {title,subjectName,college,questionAccountName,state,time,answerAccountName} = this.state;
+        const {title,subjectName,college,questionAccountId,state,time,answerAccountName,hide} = this.state;
         let param = {
             currentPage:1,
             pageSize:this.state.pageSize,
             title,
             subjectName,
             college,
-            questionAccountName,
+            questionAccountId,
             state,time,
-            answerAccountName
+            answerAccountName,
+            deleted:hide
         }
         reqListQuestion(param)
         .then(res=>{
@@ -211,31 +223,54 @@ export default class Question extends Component {
         //存储问题id
         qID.dispatch(questionId(e))
         this.setState({editIsModalVisible:true})
-        console.log('我点击了修改问题')
+        // console.log('我点击了修改问题')
     }
     //?确认修改问题
     handleEdit = (e) => {
         let describes = qDescribeStore.getState();
-        describes = describes.replace(/[\n]/g,"\\n");
-        describes = describes.replace(/[ ]/g,'&nbsp;');
-        let param = {
-            questionId:qID.getState(),
-            title:qTitleStore.getState(),
-            describes,
-            adminId:storageUtils.getUser().adminId
+        if(describes != null){
+            describes = describes.replace(/[\n]/g,"\\n");
+            describes = describes.replace(/[ ]/g,'&nbsp;');
         }
-        reqUpdateQuestion(param)
-        .then(res=>{
+        let formData = new FormData();
+        formData.append('questionId',qID.getState());
+        formData.append('title',qTitleStore.getState());
+        formData.append('describes', describes)
+        formData.append('adminId', storageUtils.getUser().adminId)
+        formData.append('img', qImgStore.getState())
+
+        axios({
+            method: 'post',
+            url: "https://xscqa.cqupt.edu.cn/question/admin/updateQuestion",
+            headers: { 'Content-type': 'multipart/form-data;charset=UTF-8' },
+            data: formData
+          })
+          .then(res=>{
             console.log(res)
-            const {code} = res;
-            if(1 == code) {
+            if(res.data.code == 1){
                 message.success('修改问题成功！');
                 this.setState({editIsModalVisible:false})
             }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+            
+          })
+    //     let param = {
+    //         questionId:qID.getState(),
+    //         title:qTitleStore.getState(),
+    //         describes,
+    //         adminId:storageUtils.getUser().adminId
+    //     }
+    //     reqUpdateQuestion(param)
+    //     .then(res=>{
+    //         console.log(res)
+    //         const {code} = res;
+    //         if(1 == code) {
+                // message.success('修改问题成功！');
+                // this.setState({editIsModalVisible:false})
+    //         }
+    //     })
+    //     .catch(err=>{
+    //         console.log(err)
+    //     })
     }
     cancelEdit = (e) => {
         this.setState({editIsModalVisible:false})
@@ -253,16 +288,17 @@ export default class Question extends Component {
     //?实现分页
     handleChangeQustion = (value) =>{
         console.log(value)
-        const {title,subjectName,college,questionAccountName,state,time,answerAccountName} = this.state;
+        const {title,subjectName,college,questionAccountId,state,time,answerAccountName,hide} = this.state;
         let param = {
             currentPage:value.current,
             pageSize:value.pageSize,
             title,
             subjectName,
             college,
-            questionAccountName,
+            questionAccountId,
             state,time,
-            answerAccountName
+            answerAccountName,
+            deleted:hide
         }
 
         this.initQuestionTable(param)
@@ -276,6 +312,13 @@ export default class Question extends Component {
        }
        const res = await reqDisapperQuestion(param);
        console.log(res)
+       message.success("隐藏成功")
+       let param1 = {
+        currentPage:1,
+        pageSize:this.state.pageSize
+        }
+        this.initQuestionTable(param1)
+       
 
     }    
     render() {
@@ -306,6 +349,12 @@ export default class Question extends Component {
                 title: '状态',
                 dataIndex: 'state',
                 render: (text) => (<span>{text == 0? "未解决" : "已解决"}</span> ),
+                align: 'center'
+              },
+              {
+                title: '是否隐藏',
+                dataIndex: 'deleted',
+                render: (text) => (<span>{text == '0' ? "未隐藏" : "已隐藏"}</span> ),
                 align: 'center'
               },
               {
@@ -352,7 +401,13 @@ export default class Question extends Component {
                             <li>状态： <Select  style={{ width: 180 }} onChange={this.handleChange}>
                                         <Option value="1">已解决</Option>
                                         <Option value="0">未解决</Option>
-                                        <Option value=''></Option>
+                                        <Option value=''>全部</Option>
+                                       </Select>
+                            </li>
+                            <li>是否隐藏： <Select  style={{ width: 180 }} onChange={this.handleChangeHide}>
+                                        <Option value="1">已隐藏</Option>
+                                        <Option value="0">未隐藏</Option>
+                                        <Option value=''>全部</Option>
                                        </Select>
                             </li>
                             <li>时间：
@@ -375,15 +430,13 @@ export default class Question extends Component {
                             <Button type="primary" onClick={this.search} icon={<SearchOutlined />}>
                                 搜索
                             </Button>
-                            
                         </ul>
                         <ul>
                             <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=1">
                                 <Button type="primary" icon={<DownloadOutlined />}>
                                     导出
                                 </Button>
-                            </a>
-                            
+                            </a>                            
                         </ul>
                     </div>
                 </div>

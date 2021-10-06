@@ -44,10 +44,10 @@ const menuList = [
         icon: 'icon-jifen1',
         route: '/admin/score'
     },
-    {
-        title: '小程序监测',
-        icon: 'icon-jiance',
-        route: '/admin/monitor'
-    }
+    // {
+    //     title: '小程序监测',
+    //     icon: 'icon-jiance',
+    //     route: '/admin/monitor'
+    // }
 ]
 export default menuList

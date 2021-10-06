@@ -24,6 +24,7 @@ export default class EditQuestion extends Component {
     state = {
         title:null,
         describes:'null',
+        url:"123",
         imgPath:null,
         publishTime:null,
         updateTime:null,
@@ -47,6 +48,17 @@ export default class EditQuestion extends Component {
               updateTime,
               fileList
             })
+      qTitleStore.dispatch(questionChangeTitle(this.state.title));
+      qDescribeStore.dispatch(questionChangeDescribe(this.state.describes));
+
+
+      }
+      beforeUpload (file, fileList) {
+        console.log("上传前")
+        console.log(file)
+        qImgStore.dispatch(questionChangeImg(file))
+        console.log(qImgStore.getState())
+        // subjectIconStore.dispatch(subjectIcon(file))
       }
     handleCancel = () => this.setState({ previewVisible: false });
     handlePreview = async file => {
@@ -60,12 +72,12 @@ export default class EditQuestion extends Component {
       });
     };
     handleChange = ({file, fileList }) => {
-      console.log(file.status)
+      // console.log(file.status)
       this.setState({ fileList });
       console.log(fileList)
-      qImgStore.dispatch(questionChangeImg(file))
-      console.log("存图片文件")
-      console.log(qImgStore.getState())
+      
+      // console.log("存图片文件")
+     
       if(file.status == 'done'){
         message.success("修改图片成功！")
       }
@@ -75,28 +87,51 @@ export default class EditQuestion extends Component {
 
     //?监控表单内容变化
     titleTxtChanged = (e) => {
-      console.log(e.target.value)
-      this.setState({
-        title: e.target.value
-      })
+     
       
+      console.log(e.target.value)
+      // if(e.target.value == ''){
+      //   this.setState({
+      //     title: null
+      //   })
+      // }else{
+      //   this.setState({
+      //     title: e.target.value
+      //   })
+        
+      // }
+      if(e.target.value == ''){
+        this.setState({
+          title: null
+        })
+      }else{
+        this.setState({
+          title: e.target.value
+        })
+        
+      }
       qTitleStore.dispatch(questionChangeTitle(e.target.value));
-      console.log(qTitleStore.getState());
-
+      // console.log(qTitleStore.getState());
     }
     describeTxtChanged = (e) => {
-      console.log(e.target.value)
-      this.setState({
-        describes: e.target.value
-      })
-     
-      qDescribeStore.dispatch(questionChangeDescribe(e.target.value));
-      console.log("redux")
-      console.log(qDescribeStore.getState());
-    }
+      if(e.target.value == ''){
+        this.setState({
+          describes: null
+        })
+      }else{
+        this.setState({
+          describes: e.target.value
+        })
+        
+      }
 
+   
+      qDescribeStore.dispatch(questionChangeDescribe(e.target.value));
+      // console.log("redux")
+      // console.log(qDescribeStore.getState());
+    }
     render() {
-        const { previewVisible, previewImage, fileList, previewTitle, publishTime, updateTime } = this.state;
+        const { previewVisible, previewImage, fileList, previewTitle, publishTime, updateTime,url } = this.state;
         const uploadButton = (
         <div>
             <PlusOutlined />
@@ -112,10 +147,13 @@ export default class EditQuestion extends Component {
           questionId:qID.getState(),
           adminId:storageUtils.getUser().adminId
         }
-        let {title,describes} = this.state;
-        
-        describes = describes.replace(/&nbsp;/ig, ' ');
-        describes = describes.replace(/\\n/gi,'\n')
+        let {title,describes} = this.state ;
+        // let title = this.state.title ?
+        console.log(describes)
+        title == null ? title = '': title = title.replace(/&nbsp;/ig, ' ');
+        title == null ? title = '':title = title.replace(/\\n/gi,'\n')
+        describes == null ? describes = '': describes = describes.replace(/&nbsp;/ig, ' ');
+        describes == null ? describes = '':describes = describes.replace(/\\n/gi,'\n')
         return (
             <>
                     <ul style={ulStyle}>
@@ -132,9 +170,10 @@ export default class EditQuestion extends Component {
                     <ul style={ulStyle}>
                        <span  style={spanStyle}>图片：</span>
                         <Upload
-                        action="/admin/updateQuestion"
+                        action={url}
                         name="img"
                         data={paramData}
+                        beforeUpload={this.beforeUpload}
                         listType="picture-card"
                         fileList={fileList}
                         onPreview={this.handlePreview}

@@ -1,18 +1,20 @@
+import axios from 'axios';
 import React, { Component } from 'react'
 import AdminTopbar from "../../../components/admin-topbar";
-import { Table, Input, Button, Select, Cascader, message } from 'antd';
+import { Table, Input, Button, Select, Cascader, message ,Upload  } from 'antd';
 //?引入localstorage模块
 import storageUtils from '@/utils/storageUtils'
 
-import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
+import { SearchOutlined, DownloadOutlined ,UploadOutlined } from '@ant-design/icons';
 import './index.less'
-import {reqListAllSubject,reqListAccount,reqDisapperQuestion,reqUpdateAccountRole} from '@/api/index'
+import {reqListAllSubject,reqListAccount,reqDisapperQuestion,reqUpdateAccountRole,reqDeleteAccountById} from '@/api/index'
 const { Option } = Select;
 export default class User extends Component {
     state = {
         adminId:null,
         college:null,
         userName:null,
+        userCode:null,
         role:null,
         newRole:null,
         subjectId:null,
@@ -20,7 +22,8 @@ export default class User extends Component {
         total:null,
         type: storageUtils.getUser().type,
         userDataSource: [],
-        options:[]
+        options:[],
+        status:0
 
     }
     async componentDidMount () {
@@ -73,6 +76,17 @@ export default class User extends Component {
           }
 
     }
+    userCodeSearch = (e) => {
+        if(e.target.value == ""){
+            this.setState({
+              userCode: null
+            })
+        }else{
+          this.setState({
+            userCode: e.target.value
+          })
+        }
+    }
     collegeSearch = (e) => {
         if(e.target.value == ""){
               this.setState({
@@ -100,14 +114,17 @@ export default class User extends Component {
 
     //?实现搜索
     userSearch = () => {
-        const {college,userName,role,pageSize} = this.state
+        const {college,userName,role,pageSize,userCode} = this.state
         let param = {
             currentPage:1,
             pageSize,
             college,
             userName,
             role,
+            accountId:userCode,
+            excel:null
         }
+        console.log(param)
         this.initUserTable(param)
     }
 
@@ -133,17 +150,19 @@ export default class User extends Component {
       }
 
     //?删除用户
-    async disapper (e) {
-        let param = {
-             accountId:Number(e),
-             adminId:Number(storageUtils.getUser().adminId)
-        }
-        console.log(param)
-        const res = await reqDisapperQuestion(param);
-        message.success("删除成功")
-        this.userSearch();
-        console.log(res)
-     }
+    // async disapper (e) {
+    //     let param = {
+    //          accountId:Number(e),
+    //          adminId:Number(storageUtils.getUser().adminId)
+    //     }
+    //     console.log(param)
+    //     const res = await reqDeleteAccountById(param);
+    //     if(res.code == 1){
+    //         message.success("删除成功")
+    //         this.userSearch();
+    //     }
+       
+    //  }
      
      //?修改角色
      updateUserRole = (e) => {
@@ -168,6 +187,46 @@ export default class User extends Component {
 
          })
      }
+
+
+     export = () => {
+        let formData = new FormData();
+        formData.append('excel',this.state.excel);
+        axios({
+            method: 'post',
+            url: "https://xscqa.cqupt.edu.cn/question/admin/importVolunteer",
+            headers: { 'Content-type': 'multipart/form-data;charset=UTF-8' },
+            data: formData
+          })
+          .then(res=>{
+            console.log(res)
+            if(res.data.code == 1){
+              message.success("成功导入！")
+          
+            }
+          })
+
+     }
+   
+        beforeUpload =(file, fileList) =>{
+            console.log("上传前")
+            console.log(file)
+            this.setState({excel:file,
+            status:1})
+          }
+          handleChange(info) {
+               
+            if (info.file.status !== 'uploading') {
+              console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+              message.success(`${info.file.name} file uploaded successfully`);
+            } else if (info.file.status === 'error') {
+              message.error(`${info.file.name} file upload failed.`);
+            }
+          }
+
+     
     render() {
         const {options} = this.state;
         const options2 = options.slice(0,3) 
@@ -180,6 +239,11 @@ export default class User extends Component {
               {
                 title: '所属学院',
                 dataIndex: 'college',
+                align: 'center'
+              },
+              {
+                title: '总积分',
+                dataIndex: 'score',
                 align: 'center'
               },
               {
@@ -201,39 +265,65 @@ export default class User extends Component {
               {
                 title: '操作',
                 dataIndex: 'accountId',
-                render: (accountId) => (<><a onClick={() => this.updateUserRole(accountId)}>修改角色</a> <a onClick={() => this.disapper(accountId)}>删除</a></>),
+                render: (accountId) => (<><a onClick={() => this.updateUserRole(accountId)}>修改角色</a>
+                 {/* <a onClick={() => this.disapper(accountId)}>删除</a> */}
+                 </>),
                 align: 'center'
               }
         ] 
+
         
         return (
             <div className="user-search">
                 <AdminTopbar tag="用户管理" timeShow='false' />
                 <div className="user-search-top"> 
                     <ul>
-                        <li>姓名：<Input onChange={ e => this.userNameSearch(e) } style={{width:180}}/></li>
-                        <li>所属学院：<Input onChange={ e => this.collegeSearch(e) } style={{width:180}}/></li>
+                        <li>姓名：<Input onChange={ e => this.userNameSearch(e) } style={{width:110}}/></li>
+                        <li>统一认证码：<Input onChange={ e => this.userCodeSearch(e) } style={{width:110}}/></li>
+                        <li>所属学院：<Input onChange={ e => this.collegeSearch(e) } style={{width:110}}/></li>
                         <li>角色：
-                            <Select  style={{ width: 180 }} onChange={this.onChange}>
+                            <Select  style={{ width: 110 }} onChange={this.onChange}>
                                 <Option value="1">教师</Option>
                                 <Option value="2">志愿者</Option>
                                 <Option value='3'>学生</Option>
                                 <Option value='4' >管理员</Option>
-                                <Option value=''>无</Option>
+                                <Option value=''>全部</Option>
                             </Select>
                         </li>
                     </ul>
                     <ul>
-                        <li>
-                        <Button type="primary" onClick={this.userSearch} icon={<SearchOutlined />}>
+                        
+                            <div>
+                            <Upload 
+                             name='excel'
+                             action='123'
+                             beforeUpload={this.beforeUpload}
+                             onChange={this.handleChange}
+                             >
+                                <Button type="primary" style={{marginRight:"10px"}} icon={<UploadOutlined />}>选择文件</Button>
+                                
+                            </Upload>
+                            <Button
+                                    type="primary"
+                                    onClick={this.export}
+                                    disabled={this.state.status == 0}
+                                    style={{ marginTop: 16 }}
+                                    >
+                                    上传
+                            </Button>
+                            </div>
+                   
+                       
+                        <Button type="primary" style={{marginRight:"10px"}} onClick={this.userSearch} icon={<SearchOutlined />}>
                             搜索
                         </Button>
-                        </li>
+                      
                         <a href="https://xscqa.cqupt.edu.cn/question/admin/exportExcel?type=2">
                             <Button type="primary" icon={<DownloadOutlined />}>
                                 导出
                             </Button>
                         </a>    
+                       
                     </ul>    
                 </div>
                 <div className="user-search-list">

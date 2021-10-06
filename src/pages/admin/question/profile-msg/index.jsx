@@ -23,7 +23,9 @@ export default class ProfileMsg extends Component {
         const res = await reqGetAccountById({accountId:stuIdStore.getState()});
         console.log(res)
         if(res.code == 1){
-            const {imgPath,userName,role,introduce,questionCount,answerCount,agreeCount,collectionCount,solveCount,score} = res.data;
+            let {imgPath,userName,role,introduce,questionCount,answerCount,agreeCount,collectionCount,solveCount,score} = res.data;
+            introduce = introduce.replace(/&nbsp;/ig, ' ');
+            introduce = introduce.replace(/\\n/gi,'\n')
             this.setState({
                 imgPath: "https://xscqa.cqupt.edu.cn/question/img" + imgPath,
                 userName,
@@ -43,7 +45,8 @@ export default class ProfileMsg extends Component {
             display: 'flex',
             justifyContent: 'space-between'
         }
-        const {imgPath,userName,role,introduce,questionCount,answerCount,agreeCount,collectionCount,solveCount,score} = this.state;
+        let {imgPath,userName,role,introduce,questionCount,answerCount,agreeCount,collectionCount,solveCount,score} = this.state;
+        
         return (
             <>
                 <ul>

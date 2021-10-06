@@ -3,12 +3,21 @@
 
 import ajax from './ajax'
 const url = 'https://xscqa.cqupt.edu.cn/question'
+// const url =''
+
 
 // "proxy": "https://xscqa.cqupt.edu.cn/question/"
   /**
    * 登录
    */
+  //  export const reqLogin = params => ajax(url + '/adminCasLogin', params, "GET")
+
+
+  /**
+   * 登录
+   */
    export const reqLogin = params => ajax(url + '/admin/login', params, "POST")
+
 
    //?统计数据接口
   /**
@@ -80,6 +89,11 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
      */
       export const reqUpdateAccountRole = params => ajax(url + '/admin/updateAccountRole', params, "POST")
 
+      /**
+       * 删除用户
+       */
+       export const reqDeleteAccountById = params => ajax(url + '/admin/deleteAccountById', params, "POST")
+       
    
     
 
@@ -131,7 +145,7 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
         /**
          * 删除学科
          */
-         export const reqDeleteSubject = params => ajax(url + '/admin/deleteSubject', params, "GET")
+         export const reqDeleteSubject = params => ajax(url + '/admin/deleteSubject', params, "POST")
   
 
 
@@ -150,6 +164,15 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
       * 隐藏举报信息
       */
       export const reqDeleteReportById = params => ajax(url + "/admin/deleteReportById",params,"POST")
+    /**
+     * 解决举报信息
+     */
+     export const reqUpdateReportState = params => ajax(url + "/admin/updateReportState",params,"POST")
+
+     /**
+      * 警告被举报者
+      */
+      export const reqWarnAccount = params => ajax(url + "/admin/warnAccount",params,"POST")
 
       /**
        * 反馈查询
@@ -192,6 +215,19 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
      * 查看日志信息详情
      */
     export const reqGetLogById = params => ajax(url + "/admin/getLogById",params,"GET")
+
+
+
+    //?积分管理
+    /**
+     * 查看所有积分规则
+     */
+     export const reqAllRules = params => ajax(url + "/admin/listAllRules",params,"GET")
+    /**
+     * 修改积分规则
+     */
+     export const reqUpdateRule = params => ajax(url + "/admin/updateRule",params,"POST")
+
 
 
    

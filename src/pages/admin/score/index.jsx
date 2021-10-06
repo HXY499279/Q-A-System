@@ -1,7 +1,4 @@
 import React, { Component } from 'react'
-import {Table, Button, Input} from 'antd'
-import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
-
 import AdminTopbar from '../../../components/admin-topbar'
 import Rule from './rule'
 import './index.less'
@@ -17,51 +14,51 @@ export default class Score extends Component {
         ]
     }
     render() {
-        const scoretColumns = [
-            {
-                title: '序号',
-                dataIndex: 'index',
-                align: 'center'
-              },
-            {
-                title: '姓名',
-                dataIndex: 'name',
-                align: 'center'
-              },
-              {
-                title: '所属学院',
-                dataIndex: 'academy',
-                align: 'center'
-              },
-              {
-                title: '总积分',
-                dataIndex: 'allscore',
-                align: 'center'
-              },
-        ]
+        // const scoretColumns = [
+        //     {
+        //         title: '序号',
+        //         dataIndex: 'index',
+        //         align: 'center'
+        //       },
+        //     {
+        //         title: '姓名',
+        //         dataIndex: 'name',
+        //         align: 'center'
+        //       },
+        //       {
+        //         title: '所属学院',
+        //         dataIndex: 'academy',
+        //         align: 'center'
+        //       },
+        //       {
+        //         title: '总积分',
+        //         dataIndex: 'allscore',
+        //         align: 'center'
+        //       },
+        // ]
         return (
             <div className="score">
                 <div className="score-rule">
                     <div className="score-object">
-                        <AdminTopbar tag="积分规则——学生"/>
+                        <AdminTopbar tag="积分规则"/>
+                        <div className="score-object-content">
+                            <Rule/>
+                        </div>
+                    </div>
+                    {/* <div className="score-object">
+                        <AdminTopbar tag="积分规则——提问"/>
                         <div className="score-object-content">
                             <Rule/>
                         </div>
                     </div>
                     <div className="score-object">
-                        <AdminTopbar tag="积分规则——志愿者"/>
+                        <AdminTopbar tag="积分规则——答疑"/>
                         <div className="score-object-content">
                             <Rule/>
                         </div>
-                    </div>
-                    <div className="score-object">
-                        <AdminTopbar tag="积分规则——教师"/>
-                        <div className="score-object-content">
-                            <Rule/>
-                        </div>
-                    </div>
+                    </div> */}
                 </div>
-                <div className="score-search">
+                {/* <div className="score-search">
 
                     <AdminTopbar tag="用户积分"/>
                     <div className="score-search-top">
@@ -87,7 +84,7 @@ export default class Score extends Component {
                     dataSource={this.state.scoreDataSource}
                     columns={scoretColumns} 
                     rowKey="index"/>
-                </div>
+                </div> */}
             </div>
         )
     }

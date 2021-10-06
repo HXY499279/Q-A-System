@@ -38,11 +38,11 @@ export default class Admin extends Component {
           return <Redirect to="/login"></Redirect>
       }
         return (
-            <Layout style={{minHeight:"100%"}}>
+            <Layout style={{minHeight:"100vh",minWidth:'1400px'}}>
             <Header/>
             <Layout>
               <Sider style={{backgroundColor: 'white'}} width="180"><LeftNav/></Sider>
-              <Content style={{minHeight:"100vh"}}>
+              <Content style={{minHeight:"100%",minWidth:'1200px'}}>
                 <Switch>
                   <Route path="/admin/home" component={Home}></Route>
                   <Route path="/admin/question" component={Question}></Route>
@@ -55,12 +55,17 @@ export default class Admin extends Component {
                   <Route path="/admin/feedback" component={Feedback}></Route>
                   <Route path="/admin/log" component={Log}></Route>
                   <Route path="/admin/score" component={Score}></Route>
-                  <Route path="/admin/monitor" component={Monitor}></Route>
+                  {/* <Route path="/admin/monitor" component={Monitor}></Route> */}
                   <Redirect to="/admin/home"></Redirect>
                 </Switch>                
               </Content>
             </Layout>
-            <Footer style={{backgroundColor: '#30CB88', color: '#FFFFFF',textAlign: 'center'}}>重庆邮电大学学生处</Footer>
+            <Footer style={{
+              backgroundColor: '#30CB88', 
+              color: '#ffffff',
+              textAlign: 'center',
+              marginBottom:"-20px"
+          }}>重庆邮电大学学生处</Footer>
           </Layout>
         )
     }

@@ -2,8 +2,8 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import './index.less'
 import AdminTopbar from "../../../components/admin-topbar";
-import { Table, Modal, Input, Button,Select,Space,message} from 'antd';
-import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
+import { Table, Modal, Input, Button,Select,Popconfirm ,message} from 'antd';
+import { SearchOutlined, DownloadOutlined ,CloseCircleOutlined } from '@ant-design/icons';
 //?引入请求函数
 import {reqGetAllCollege,reqListSubject,reqDeleteSubject,reqAddSubject,reqUpdateSubject} from '@/api/index'
 //?引入localstorage模块
@@ -100,32 +100,37 @@ export default class Subject extends Component {
     this.initUserTable(param)
   }
 
-
    //? 点击修改学科回调函数
    showEditSubject = (e) => {
     subjectIdStore.dispatch(subjectId(e))
     this.setState({subjectIsModalVisible:true})
-    console.log(e)
-    console.log('我点击了修改学科')
 
    }
    changeEdit = () => {
-     console.log("我点击了OK")
-     console.log(subjectIconStore.getState().arrayBuffer())
-    let param = {
-      subjectId:subjectIdStore.getState(),
-      subjectName:subjectNameStore.getState(),
-      college:collegeStore.getState(),
-      subjectInfo:subjectInfoStore.getState(),
-      note:subjectNoteStore.getState(),
-      adminId:this.state.adminId,
-      icon:subjectIconStore.getState().arrayBuffer()
-
-    }
-    reqUpdateSubject(param)
+    //  console.log("我点击了OK")
+    let formData = new FormData();
+    formData.append('subjectId',subjectIdStore.getState());
+    formData.append('icon',subjectIconStore.getState());
+    formData.append('subjectName', subjectNameStore.getState())
+    formData.append('college', collegeStore.getState())
+    formData.append('subjectInfo', subjectInfoStore.getState())
+    formData.append('note', subjectNoteStore.getState())
+    formData.append('adminId', this.state.adminId)
+    axios({
+      method: 'post',
+      url: "https://xscqa.cqupt.edu.cn/question//admin/updateSubject",
+      headers: { 'Content-type': 'multipart/form-data;charset=UTF-8' },
+      data: formData
+    })
     .then(res=>{
       console.log(res)
+      if(res.data.code == 1){
+        message.success("成功修改学科！")
+        this.searchSubject()
+      }
+      
     })
+   
 
     this.setState({subjectIsModalVisible:false})
     }
@@ -133,7 +138,16 @@ export default class Subject extends Component {
         this.setState({subjectIsModalVisible:false})
     }
 
-
+    //清空
+    // clearAll = () => {
+    //   console.log("清空")
+    //   this.setState({
+    //     subjectName:null,
+    //     college:null
+    //   })
+    //   console.log(this.state.subjectName);
+    //   console.log(this.state.college)
+    // }
     //?添加学科
     showAddSubject = () => {
 
@@ -152,61 +166,41 @@ export default class Subject extends Component {
       formData.append('adminId', this.state.adminId)
       axios({
         method: 'post',
-        url: "/admin/addSubject",
+        url: "https://xscqa.cqupt.edu.cn/question/admin/addSubject",
         headers: { 'Content-type': 'multipart/form-data;charset=UTF-8' },
         data: formData
       })
       .then(res=>{
         console.log(res)
-        if(1 == res.code){
+        if(res.data.code == 1){
           message.success("成功添加学科！")
           this.searchSubject()
         }
       })
-      // const file = subjectIconStore.getState()
-      // var reader = new FileReader();
-      // reader.readAsBinaryString(file);  
-      // let binary
-      // reader.onload = function(){
-      //  binary = this.result;
-      // }
-      // const {lastModified,lastModifiedDate,name,size,type,uid} = obj
-      // console.log(lastModified)
-      // let formData = new FormData()
-      // formData.append("lastModifiedDate", lastModifiedDate);
-      // formData.append("name", name);
-      // formData.append("size", size);
-      // formData.append("type", type);
-      // formData.append("uid", uid);
-      // Object.keys(obj)
-      // .forEach(key => {
-      //   console.log(key)
-      //   console.log(obj[key])
-      //     formData.append(key, obj[key]);
-      // });
-      
-      // console.log(subjectIconStore.getState().arrayBuffer())
-      // let param = {
-      //   icon:subjectIconStore.getState(),
-      //   subjectName:subjectNameStore.getState(),
-      //   college:collegeStore.getState(),
-      //   subjectInfo:subjectInfoStore.getState(),
-      //   note:subjectNoteStore.getState(),
-      //   adminId:this.state.adminId,
-        
-      // }
-      // console.log(param)
-      // reqAddSubject(param)
-      // .then(res=>{
-      //   console.log(res)
-      // })
+
       this.setState({subjectAddIsModalVisible:false})
-      // console.log("我点击了添加学科")
-      
       }
       cancelAddEdit = () => {
 
           this.setState({subjectAddIsModalVisible:false})
+      }
+
+      //?删除学科
+      deleteSubject = (e) => {
+        console.log(e)
+        let param = {
+          subjectId:e,
+          adminId:this.state.adminId
+        }
+        reqDeleteSubject(param)
+        .then(res=>{
+          if(res.code == 1){
+            message.success("删除成功")
+            this.searchSubject()
+          }else{
+            message.error("删除失败")
+          }
+        })
       }
     render() {
         const subjectColumns = [
@@ -249,7 +243,12 @@ export default class Subject extends Component {
               {
                 title: '操作', 
                 dataIndex: 'subjectId',
-                render: (subjectId) => (<><a onClick={() => this.showEditSubject(subjectId)}>修改</a> <a onClick={() => this.deleteSubject(subjectId)}>删除</a></>),
+                render: (subjectId) => (<><a onClick={() => this.showEditSubject(subjectId)}>修改/查看 </a> 
+                <Popconfirm title="Are you sure？" okText="Yes" cancelText="No" onConfirm={() => this.deleteSubject(subjectId)}>
+                  <a href="#">删除</a>
+                </Popconfirm>
+                {/* <a onClick={}> 删除</a> */}
+                </>),
                 align: 'center'
               }
         ]
@@ -271,9 +270,14 @@ export default class Subject extends Component {
                         </li>
                     </ul>
                     <ul>
-                        <Button type="primary" onClick={() => this.searchSubject()} icon={<SearchOutlined />}>
+                        {/* <Button type="primary" onClick={this.clearAll} icon={<CloseCircleOutlined />}>
+                            清空
+                        </Button> */}
+                        {/* <Button type="primary" onClick={this.clearAll}> 清空</Button> */}
+                        <Button type="primary" style={{marginLeft:30}} onClick={() => this.searchSubject()} icon={<SearchOutlined />}>
                             搜索
                         </Button>
+                        
                         <Button type="primary" style={{marginLeft:30}} onClick={(e) => this.showAddSubject(e)}>
                           + 添加
                         </Button>   

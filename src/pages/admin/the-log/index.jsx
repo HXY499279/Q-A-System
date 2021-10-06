@@ -186,7 +186,7 @@ export default class Log extends Component {
                                 <Option value="1">增加</Option>
                                 <Option value="2">删除</Option>
                                 <Option value='3'>修改</Option>
-                                <Option value=''>无</Option>
+                                <Option value=''>全部</Option>
                             </Select>
                         </li>
                         <li>时间： 

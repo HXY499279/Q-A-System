@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import AdminTopbar from "../../../components/admin-topbar"
 //? antd
-import { Table, Modal, Input, Button, Select, DatePicker,Space, message} from 'antd';
+import { Table, Modal, Input, Button, Select, DatePicker,Space, message } from 'antd';
 
 import { SearchOutlined, DownloadOutlined  } from '@ant-design/icons';
+
 //?引入localstorage模块
 import storageUtils from '@/utils/storageUtils'
-import {reqListReport,reqListFeedback,reqDeleteReportById,reqDeleteFeedbackById,reqUpdateFeedbackState} from '@/api/index'
+
+//?引入请求
+import {reqWarnAccount,reqUpdateReportState,reqListReport,reqListFeedback,reqDeleteReportById,reqDeleteFeedbackById,reqUpdateFeedbackState} from '@/api/index'
 
 //?引入redux
 import {reportIdStore,feedbackIdStore} from '@/redux/store' 
@@ -186,21 +189,64 @@ export default class Feedback extends Component {
     }
     //?隐藏举报
     disapperInform = (e) => {
-        // console.log(e)
         let param = {
             adminId:this.state.adminId,
             reportId:Number(e)
         }
         reqDeleteReportById(param)
         .then(res=>{
-            // console.log(res)
-            if(res.code == 1){
+            if(res.data){
                 message.success("隐藏成功")
                 this.informSearch()
+            }else{
+                message.error("隐藏失败")
             }
         })
+        .catch(err=>{
+            console.log(err)
+            message.error("发生错误")
+        })
+        
     }
-    
+    //?解决举报
+    solveInform = (e) => {
+        let param = {
+            adminId:this.state.adminId,
+            reportId:Number(e)
+        }
+        reqUpdateReportState(param)
+        .then(res=>{
+            if(res.data){
+                message.success("成功解决")
+                this.informSearch()
+            }else{
+                message.error("解决失败")
+            }
+            this.informSearch()
+        })
+        .catch(err=>{
+            console.log(err)
+            message.error("发生错误")
+        })
+    }
+    //?对被举报者进行警告
+    warnInform = (e) => {
+        let param = {
+            adminId:this.state.adminId,
+            reportId:Number(e)
+        }
+        reqWarnAccount(param)
+        .then(res=>{
+            if(res.data){
+                message.success("警告成功")
+                this.informSearch()
+            }else{
+                message.error("警告失败")
+            }
+            this.informSearch()
+        })
+
+    }
     //?点击查看反馈
     showFeedback = (e) => {
         console.log(e)
@@ -355,7 +401,8 @@ export default class Feedback extends Component {
             {
                 title: '举报内容',
                 dataIndex: 'content',
-                render:text=>(<p>{text.substring(0,8)+"..."}</p>),
+                // dangerouslySetInnerHTML = {{__html:text.substring(0,35)+"..."}}
+                render:text=>(<p dangerouslySetInnerHTML = {{__html:text.substring(0,35)+"..."}}></p>),
                 align: 'center'
               },
               {
@@ -393,7 +440,11 @@ export default class Feedback extends Component {
               {
                 title: '操作',
                 dataIndex: 'reportId',
-                render: (reportId) => (<><a onClick={() => this.showInform(reportId)}>查看 </a><a> 警告 </a><a onClick={() => this.disapperInform(reportId)}> 隐藏</a></>),
+                render: (reportId) => (<>
+                <a onClick={() => this.showInform(reportId)}>查看 </a>
+                <a onClick={() => this.warnInform(reportId)}>警告</a>
+                <a onClick={() => this.disapperInform(reportId)}> 隐藏</a>
+                <a onClick={() => this.solveInform(reportId)}> 解决</a></>),
                 align: 'center'
               }
           ]
@@ -401,7 +452,7 @@ export default class Feedback extends Component {
             {
                 title: '反馈内容',
                 dataIndex: 'content',
-                render:text=>(<p>{text.substring(0,8)+"..."}</p>),
+                render:text=>(<p dangerouslySetInnerHTML = {{__html:text.substring(0,8)+"..."}}></p>),
                 align: 'center'
               },
               {
@@ -468,7 +519,7 @@ export default class Feedback extends Component {
                                     <Select  style={{ width: 180 }} onChange={this.handleChange}>
                                         <Option value="1">已解决</Option>
                                         <Option value="0">未解决</Option>
-                                        <Option value=''>无</Option>
+                                        <Option value=''>全部</Option>
                                     </Select>
                                </li>
                             </ul>

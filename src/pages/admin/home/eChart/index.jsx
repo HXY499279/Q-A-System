@@ -268,7 +268,7 @@ export default class EChart extends Component {
         let myChart4 = echarts.init(document.querySelector(".echart-content2-bar"));
         let option4 = {
             title: {
-                text: '各学院登录数量分布',
+                text: '各学科问题数量分布',
                 left: 'center',
                 textStyle:{
                     color:"#848484",

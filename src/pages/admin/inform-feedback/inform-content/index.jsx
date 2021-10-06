@@ -33,8 +33,6 @@ export default class InformContent extends Component {
             imgPath2
         })
     }
-
-
     render() {
         const hr = {
             marginBottom:'20px',

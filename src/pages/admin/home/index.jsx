@@ -8,7 +8,7 @@ import './index.less'
 
 
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 
 

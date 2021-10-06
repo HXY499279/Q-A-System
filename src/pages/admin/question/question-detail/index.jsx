@@ -10,7 +10,8 @@ import storageUtils from '@/utils/storageUtils'
 export default class QuestionDetail extends Component {
     state = {
         describes:null,
-        questionDetail:[]
+        questionDetail:[],
+        imgPath:null
     }
     async componentDidMount () {
         const questionId = storageUtils.getQuestionId();
@@ -23,9 +24,10 @@ export default class QuestionDetail extends Component {
         }
         const res = await reqGetQuestionById(param)
         console.log(res)
-        let {describes} = res.data
+        let {describes,imgPath} = res.data
         this.setState({
-            describes
+            describes,
+            imgPath
         })
         const res2 = await reqGetQuestionById2(param)
         console.log(res2)
@@ -34,12 +36,13 @@ export default class QuestionDetail extends Component {
         })
     }
     render() {
-        const {describes} = this.state
+        const {describes,imgPath} = this.state
         return (
             <div className="question-detail">
                 <AdminTopbar tag="问题详情" timeShow="false"/>
                 <div className="question-detail-content">
                     <h1 dangerouslySetInnerHTML = {{__html:describes}}></h1>
+                    <img className="questionImg"  src={"https://xscqa.cqupt.edu.cn/question/img" + imgPath} alt="" />
                     <hr/>
                     {
                         this.state.questionDetail.map(obj => {
@@ -64,7 +67,8 @@ export default class QuestionDetail extends Component {
                                         </ul>
                                         <ul>
                                             <span>回答：</span>
-                                            <span dangerouslySetInnerHTML = {{__html:obj.content}}></span>
+                                            <p dangerouslySetInnerHTML = {{__html:obj.content}}></p>
+                                            <img style={{width:'70%'}} src={"https://xscqa.cqupt.edu.cn/question/img" + obj.contentImg} alt="" />
                                         </ul>
                                     </div>
                                     <hr/>
