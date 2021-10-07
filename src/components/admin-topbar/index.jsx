@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { DatePicker } from 'antd';
 import './index.less'
+
 const { RangePicker } = DatePicker;
 
 export default class AdminTopbar extends Component {
@@ -11,6 +12,7 @@ export default class AdminTopbar extends Component {
     onOk = (value) => {
         console.log('onOk: ', value);
     }
+
     render() {
         return (
             <div className="admin-topbar">

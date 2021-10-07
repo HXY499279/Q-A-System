@@ -15,7 +15,7 @@ export default class Message extends Component {
         adminId:null,
         timeType:"year",
         newsId:null,
-        pageSize:1,
+        pageSize:8,
         total:null,
         title:null,
         adminName:null,

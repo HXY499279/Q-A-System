@@ -188,26 +188,26 @@ export default class Feedback extends Component {
         this.setState({informIsModalVisible:false})
     }
     //?隐藏举报
-    disapperInform = (e) => {
-        let param = {
-            adminId:this.state.adminId,
-            reportId:Number(e)
-        }
-        reqDeleteReportById(param)
-        .then(res=>{
-            if(res.data){
-                message.success("隐藏成功")
-                this.informSearch()
-            }else{
-                message.error("隐藏失败")
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-            message.error("发生错误")
-        })
+    // disapperInform = (e) => {
+    //     let param = {
+    //         adminId:this.state.adminId,
+    //         reportId:Number(e)
+    //     }
+    //     reqDeleteReportById(param)
+    //     .then(res=>{
+    //         if(res.data){
+    //             message.success("隐藏成功")
+    //             this.informSearch()
+    //         }else{
+    //             message.error("隐藏失败")
+    //         }
+    //     })
+    //     .catch(err=>{
+    //         console.log(err)
+    //         message.error("发生错误")
+    //     })
         
-    }
+    // }
     //?解决举报
     solveInform = (e) => {
         let param = {
@@ -216,13 +216,13 @@ export default class Feedback extends Component {
         }
         reqUpdateReportState(param)
         .then(res=>{
-            if(res.data){
+            if(res.data.code == 1){
                 message.success("成功解决")
                 this.informSearch()
             }else{
                 message.error("解决失败")
             }
-            this.informSearch()
+        
         })
         .catch(err=>{
             console.log(err)
@@ -243,7 +243,7 @@ export default class Feedback extends Component {
             }else{
                 message.error("警告失败")
             }
-            this.informSearch()
+           
         })
 
     }
@@ -308,19 +308,19 @@ export default class Feedback extends Component {
     }
 
     //?隐藏反馈
-    disapperFeedback = (e) => {
-        let param = {
-            adminId:this.state.adminId,
-            feedbackId:Number(e)
-        }
-        reqDeleteFeedbackById(param)
-        .then(res=>{
-            if(res.code == 1){
-                message.success("隐藏成功")
-                this.feedbackSearch()
-            }
-        })
-    }
+    // disapperFeedback = (e) => {
+    //     let param = {
+    //         adminId:this.state.adminId,
+    //         feedbackId:Number(e)
+    //     }
+    //     reqDeleteFeedbackById(param)
+    //     .then(res=>{
+    //         if(res.code == 1){
+    //             message.success("隐藏成功")
+    //             this.feedbackSearch()
+    //         }
+    //     })
+    // }
     //?解决反馈
     solveFeedback = (e) => {
         let param = {
@@ -443,8 +443,9 @@ export default class Feedback extends Component {
                 render: (reportId) => (<>
                 <a onClick={() => this.showInform(reportId)}>查看 </a>
                 <a onClick={() => this.warnInform(reportId)}>警告</a>
-                <a onClick={() => this.disapperInform(reportId)}> 隐藏</a>
-                <a onClick={() => this.solveInform(reportId)}> 解决</a></>),
+                {/* <a onClick={() => this.disapperInform(reportId)}> 隐藏</a> */}
+                {/* <a onClick={() => this.solveInform(reportId)}> 解决</a> */}
+                </>),
                 align: 'center'
               }
           ]
@@ -479,7 +480,11 @@ export default class Feedback extends Component {
               {
                 title: '操作',
                 dataIndex: 'feedbackId',
-                render: (feedbackId) => (<><a onClick={() => this.showFeedback(feedbackId)}>查看 </a><a onClick={() => this.solveFeedback(feedbackId)}> 解决 </a><a onClick={() => this.disapperFeedback(feedbackId)}> 隐藏</a></>),
+                render: (feedbackId) => (<>
+                <a onClick={() => this.showFeedback(feedbackId)}>查看 </a>
+                <a onClick={() => this.solveFeedback(feedbackId)}> 解决 </a>
+                {/* <a onClick={() => this.disapperFeedback(feedbackId)}> 隐藏</a> */}
+                </>),
                 align: 'center'
               }
         ]

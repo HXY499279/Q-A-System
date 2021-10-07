@@ -172,7 +172,7 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
      /**
       * 警告被举报者
       */
-      export const reqWarnAccount = params => ajax(url + "/admin/warnAccount",params,"POST")
+      export const reqWarnAccount = params => ajax(url + "/admin/wornAccount",params,"POST")
 
       /**
        * 反馈查询

@@ -54,7 +54,7 @@ export default class InformContent extends Component {
                 <hr style={hr}/>
                 <div>
                     <div>被举报内容：{describes}</div>
-                    <img src={"https://xscqa.cqupt.edu.cn/question/img"+imgPath} style={{width:'100%'}} alt="举报详情图片"/>
+                    <img src={"https://xscqa.cqupt.edu.cn/question/img"+imgPath} style={{display:imgPath == -1 ? 'none' : 'block',width:"100%"}}  alt="举报详情图片"/>
                 </div>
                 <hr style={hr}/>
                 <div style={mydiv}>

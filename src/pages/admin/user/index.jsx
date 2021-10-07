@@ -202,15 +202,15 @@ export default class User extends Component {
             console.log(res)
             if(res.data.code == 1){
               message.success("成功导入！")
-          
+            }else{
+              message.error("导入失败！")
             }
           })
-
      }
    
         beforeUpload =(file, fileList) =>{
-            console.log("上传前")
-            console.log(file)
+            // console.log("上传前")
+            // console.log(file)
             this.setState({excel:file,
             status:1})
           }

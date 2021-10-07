@@ -12,6 +12,7 @@ import memoryUtils from './utils/memoryUtils'
 
 memoryUtils.user = storageUtils.getUser();
 
+
 ReactDOM.render(
     <HashRouter>
     {/* <React.StrictMode> */}
