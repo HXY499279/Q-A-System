@@ -19,6 +19,14 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
    export const reqLogin = params => ajax(url + '/admin/login', params, "POST")
 
 
+  //  export const logout = params => ajax("/authserver/logout",params,"GET")
+
+
+   //?获取登录信息
+   export const reqLoginInfo = params => ajax(url + '/getAdminInfo', params, "GET")
+
+
+
    //?统计数据接口
   /**
    * 今日数据请求函数
@@ -172,7 +180,7 @@ const url = 'https://xscqa.cqupt.edu.cn/question'
      /**
       * 警告被举报者
       */
-      export const reqWarnAccount = params => ajax(url + "/admin/wornAccount",params,"POST")
+      export const reqWarnAccount = params => ajax(url + "/admin/warnAccount",params,"POST")
 
       /**
        * 反馈查询

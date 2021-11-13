@@ -33,10 +33,10 @@ const {  Footer, Sider, Content } = Layout;
 export default class Admin extends Component {
     render() {
       //?判断用户信息是否存储在内存中
-      const user = memoryUtils.user
-      if (!user.adminId) {
-          return <Redirect to="/login"></Redirect>
-      }
+      // const user = memoryUtils.user
+      // if (!user.adminId) {
+      //     return <Redirect to="/login"></Redirect>
+      // }
         return (
             <Layout style={{minHeight:"100vh",minWidth:'1400px'}}>
             <Header/>
