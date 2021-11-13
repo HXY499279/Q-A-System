@@ -229,7 +229,8 @@ export default class Subject extends Component {
                 title: '累计提问',
                 dataIndex: 'questionCount',
                 align: 'center'
-              },,
+                //
+              },
               {
                 title: '累计回答',
                 dataIndex: 'answerCount',
