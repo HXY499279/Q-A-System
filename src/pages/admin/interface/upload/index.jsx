@@ -33,9 +33,9 @@ export default class UploadImg extends Component {
         let fileList =[]
         reqListStaticImg()
         .then(res=>{
-          console.log(res)
+          //console.log(res)
           const {list} = res.data;
-          console.log(list.length)
+          //console.log(list.length)
           let lunboArr = []
           for(let i = 0; i < list.length;i++) {
             list[i].url = "https://xscqa.cqupt.edu.cn/question/img"+list[i].url
@@ -52,14 +52,14 @@ export default class UploadImg extends Component {
           if(this.props.type == 1){
             let num = Number(this.props.grade)
             fileList.push(lunboArr[num])
-            console.log("ID")
-            console.log(lunboArr[num].imgId)
+            //console.log("ID")
+            //console.log(lunboArr[num].imgId)
             this.setState({fileList,imgId:lunboArr[num].imgId})
-            console.log(this.state.imgId)
+            //console.log(this.state.imgId)
           }else{
             this.setState({fileList})
           } 
-          console.log(fileList)
+          //console.log(fileList)
         })
       }
       
@@ -67,8 +67,8 @@ export default class UploadImg extends Component {
 
 
     beforeUpload = (file, fileList) => {
-      console.log("上传前")
-      console.log(file)
+      //console.log("上传前")
+      //console.log(file)
       this.setState({
         thefile:file,
         status:1,
@@ -95,7 +95,7 @@ export default class UploadImg extends Component {
       handleChange = ({file, fileList }) => {
 
         
-        console.log(fileList)
+        //console.log(fileList)
         // const {imgId} = file
         // this.setState({imgId})
         this.setState({ fileList });
@@ -123,7 +123,7 @@ export default class UploadImg extends Component {
             data: formData
           })
           .then(res=>{
-            console.log(res)
+            //console.log(res)
             if(res.data.code == 1){
               message.success("修改成功")
               this.initPic()

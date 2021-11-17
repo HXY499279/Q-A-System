@@ -43,7 +43,7 @@ export default class HomeList extends Component {
    async initSubject(params){
      //?初始化学科相关表格数据
     const res = await reqSubject(params);
-    console.log(res)
+    // console.log(res)
     const {list} = res.data;
     const {totalRows} = res.data.pageInfo;
     this.setState({subjectTotal:totalRows,subjectDataSource:list})
@@ -65,7 +65,7 @@ export default class HomeList extends Component {
          
       };
       handleChangeSubject = value => {
-        console.log(value)
+        // console.log(value)
         let params = {
           currentPage:value.current,
           pageSize:value.pageSize

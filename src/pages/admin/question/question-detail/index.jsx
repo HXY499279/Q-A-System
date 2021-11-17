@@ -15,22 +15,22 @@ export default class QuestionDetail extends Component {
     }
     async componentDidMount () {
         const questionId = storageUtils.getQuestionId();
-        console.log("问题id")
-        console.log(questionId)
+        //console.log("问题id")
+        //console.log(questionId)
         let accountId = storageUtils.getUser().adminId;
         let param = {
             questionId,
             accountId
         }
         const res = await reqGetQuestionById(param)
-        console.log(res)
+        //console.log(res)
         let {describes,imgPath} = res.data
         this.setState({
             describes,
             imgPath
         })
         const res2 = await reqGetQuestionById2(param)
-        console.log(res2)
+        //console.log(res2)
         this.setState({
             questionDetail:res2.data
         })

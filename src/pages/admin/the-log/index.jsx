@@ -35,7 +35,7 @@ export default class Log extends Component {
     //?初始化日志列表
     async initLogTable (param) {
       const res = await reqListLog(param);
-      // console.log(res)
+      // //console.log(res)
       const {list} = res.data;
       const {totalRows} = res.data.pageInfo
       this.setState({logDataSource:list,total:totalRows})
@@ -52,7 +52,7 @@ export default class Log extends Component {
                     logName: e.target.value
                 })
             } 
-            // console.log(this.state.informContent)
+            // //console.log(this.state.informContent)
 
     }
 
@@ -67,7 +67,7 @@ export default class Log extends Component {
             type:Number(value)
         })
     }  
-    console.log(`selected ${value}`);
+    //console.log(`selected ${value}`);
   }
 
    //?设置时间选择器类型
@@ -78,7 +78,7 @@ export default class Log extends Component {
     }
     //? 时间选择器回调函数
     onChange = (date, dateStrings) => {
-        console.log(dateStrings)
+        //console.log(dateStrings)
         if(dateStrings == '') {
             this.setState({
                 logTime:null

@@ -40,7 +40,7 @@ export default class Message extends Component {
     async initMsgTable (param) {
         const res = await reqListNews(param);
         const {list} = res.data;
-        console.log(list)
+        // //console.log(list)
         const {totalRows} = res.data.pageInfo
         this.setState({msgDataSource:list,total:totalRows})
     }
@@ -49,8 +49,8 @@ export default class Message extends Component {
 
     //?监听输入框的值，编辑资讯部分
     title = (e) => {
-        //   console.log(e.target.value)
-        //   console.log(e)
+        //   //console.log(e.target.value)
+        //   //console.log(e)
           if(e.target.value == ""){
               this.setState({
                 title: null
@@ -63,8 +63,8 @@ export default class Message extends Component {
             
         }
     authod = (e) => {
-        //   console.log(e.target.value)
-        //   console.log(e)
+        //   //console.log(e.target.value)
+        //   //console.log(e)
           if(e.target.value == ""){
               this.setState({
                 adminName: null
@@ -77,8 +77,8 @@ export default class Message extends Component {
             
         }     
     txtSearch = (e) => {
-        //   console.log(e.target.value)
-        //   console.log(e)
+        //   //console.log(e.target.value)
+        //   //console.log(e)
           if(e.target.value == ""){
               this.setState({
                 content: null
@@ -93,8 +93,8 @@ export default class Message extends Component {
 
     //?监听输入框的值
     titleSearch = (e) => {
-        //   console.log(e.target.value)
-        //   console.log(e)
+        //   //console.log(e.target.value)
+        //   //console.log(e)
           if(e.target.value == ""){
               this.setState({
                 searchTitle: null
@@ -108,8 +108,8 @@ export default class Message extends Component {
         }
        
     authodSearch = (e) => {
-        //   console.log(e.target.value)
-        //   console.log(e)
+        //   //console.log(e.target.value)
+        //   //console.log(e)
           if(e.target.value == ""){
               this.setState({
                 searchAdminName: null
@@ -123,7 +123,7 @@ export default class Message extends Component {
     }
         //? 时间选择器回调函数
         onChange = (date, dateStrings) => {
-            console.log(dateStrings)
+            //console.log(dateStrings)
             if(dateStrings == '') {
                 this.setState({
                     publishTime:null
@@ -139,12 +139,12 @@ export default class Message extends Component {
 
       //?查看资讯详情的回调函数
     //   goMsgDetail = (e) => {
-    //       console.log(e)
+    //       //console.log(e)
     //   }
 
     //?实现分页
     handleChangeMsg= (value) =>{
-        console.log(value)
+        //console.log(value)
         const {searchTitle,searchAdminName,publishTime} = this.state;
         let param = {
             title:searchTitle,
@@ -162,7 +162,7 @@ export default class Message extends Component {
         let {searchTitle,searchAdminName,publishTime,pageSize} = this.state;
         let title = searchTitle;
         let adminName = searchAdminName
-        console.log(searchTitle)
+        //console.log(searchTitle)
         let param = {
             currentPage:1,
             pageSize,
@@ -191,7 +191,7 @@ export default class Message extends Component {
         }else{
             reqAddNews(param)
             .then(res=>{
-                console.log(res)
+                //console.log(res)
                 if(res.code == 1 && res.data != false) {
                     message.success("发布资讯成功！")
                     // this.setState({
@@ -225,7 +225,7 @@ export default class Message extends Component {
                     adminName} = res.data
                     content = content.replace(/&nbsp;/ig, ' ');
                     content = content.replace(/\\n/gi,'\n')
-                console.log(res)
+                //console.log(res)
                 _this.setState({
                     title,
                     content,
@@ -279,7 +279,7 @@ export default class Message extends Component {
             }
         })
         .catch(err=>{
-            console.log(err)
+            //console.log(err)
             message.error("修改失败")
             // this.setState({
             //     title:null,
@@ -304,7 +304,7 @@ export default class Message extends Component {
         }
         reqDeleteNewsById(param)
         .then(res=>{
-            console.log(res)
+            //console.log(res)
             if(res.code == 1) {
                 message.success("成功删除资讯！")
                 this.search()

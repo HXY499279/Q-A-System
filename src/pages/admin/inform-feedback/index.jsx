@@ -60,7 +60,7 @@ export default class Feedback extends Component {
     //?举报列表请求
     async initInformTable (param) {
         const res = await reqListReport(param);
-        console.log(res)
+        // console.log(res)
         const {list} = res.data;
         const {totalRows} = res.data.pageInfo
         this.setState({informDataSource:list,informTotal:totalRows})
@@ -82,7 +82,7 @@ export default class Feedback extends Component {
             informName,
             state,
             time} = this.state;
-            console.log(informContent)
+            // console.log(informContent)
         let param = {
             currentPage:value.current,
             pageSize:value.pageSize,
@@ -225,7 +225,7 @@ export default class Feedback extends Component {
         
         })
         .catch(err=>{
-            console.log(err)
+            // console.log(err)
             message.error("发生错误")
         })
     }
@@ -249,7 +249,7 @@ export default class Feedback extends Component {
     }
     //?点击查看反馈
     showFeedback = (e) => {
-        console.log(e)
+        // console.log(e)
         //存储反馈id到redux
         feedbackIdStore.dispatch(feedbackId(e))
     
@@ -370,7 +370,7 @@ export default class Feedback extends Component {
     }
     //? 时间选择器回调函数
     onChange = (date, dateStrings) => {
-        console.log(dateStrings)
+        // console.log(dateStrings)
         if(dateStrings == '') {
             this.setState({
                 time:null
@@ -392,7 +392,7 @@ export default class Feedback extends Component {
                 state:Number(value)
             })
         }  
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
        
       }
 

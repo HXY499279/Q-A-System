@@ -36,7 +36,7 @@ export default class EditQuestion extends Component {
     async componentDidMount () {
         let questionId = qID.getState();
             const res = await reqGetQuestionById ({questionId})
-            console.log(res);
+            //console.log(res);
             let {title,describes,imgpath,publishTime,updateTime,imgPath} = res.data;
             imgPath = 'https://xscqa.cqupt.edu.cn/question/img/' + imgPath;
             const fileList = [{url:imgPath}]
@@ -54,10 +54,10 @@ export default class EditQuestion extends Component {
 
       }
       beforeUpload (file, fileList) {
-        console.log("上传前")
-        console.log(file)
+        //console.log("上传前")
+        //console.log(file)
         qImgStore.dispatch(questionChangeImg(file))
-        console.log(qImgStore.getState())
+        //console.log(qImgStore.getState())
         // subjectIconStore.dispatch(subjectIcon(file))
       }
     handleCancel = () => this.setState({ previewVisible: false });
@@ -72,11 +72,11 @@ export default class EditQuestion extends Component {
       });
     };
     handleChange = ({file, fileList }) => {
-      // console.log(file.status)
+      // //console.log(file.status)
       this.setState({ fileList });
-      console.log(fileList)
+      //console.log(fileList)
       
-      // console.log("存图片文件")
+      // //console.log("存图片文件")
      
       if(file.status == 'done'){
         message.success("修改图片成功！")
@@ -89,7 +89,7 @@ export default class EditQuestion extends Component {
     titleTxtChanged = (e) => {
      
       
-      console.log(e.target.value)
+      //console.log(e.target.value)
       // if(e.target.value == ''){
       //   this.setState({
       //     title: null
@@ -111,7 +111,7 @@ export default class EditQuestion extends Component {
         
       }
       qTitleStore.dispatch(questionChangeTitle(e.target.value));
-      // console.log(qTitleStore.getState());
+      // //console.log(qTitleStore.getState());
     }
     describeTxtChanged = (e) => {
       if(e.target.value == ''){
@@ -127,8 +127,8 @@ export default class EditQuestion extends Component {
 
    
       qDescribeStore.dispatch(questionChangeDescribe(e.target.value));
-      // console.log("redux")
-      // console.log(qDescribeStore.getState());
+      // //console.log("redux")
+      // //console.log(qDescribeStore.getState());
     }
     render() {
         const { previewVisible, previewImage, fileList, previewTitle, publishTime, updateTime,url } = this.state;
@@ -149,7 +149,7 @@ export default class EditQuestion extends Component {
         }
         let {title,describes} = this.state ;
         // let title = this.state.title ?
-        console.log(describes)
+        //console.log(describes)
         title == null ? title = '': title = title.replace(/&nbsp;/ig, ' ');
         title == null ? title = '':title = title.replace(/\\n/gi,'\n')
         describes == null ? describes = '': describes = describes.replace(/&nbsp;/ig, ' ');

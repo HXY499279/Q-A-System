@@ -32,20 +32,20 @@ export default class User extends Component {
             pageSize:this.state.pageSize
         }
         const adminId = storageUtils.getUser().adminId
-        console.log(adminId)
+        //console.log(adminId)
         this.initUserTable(param)
         const res = await reqListAllSubject();
-        console.log(res)
+        //console.log(res)
         this.setState({
             options:res.data,
             adminId:Number(adminId)
         })
-        console.log(this.state.adminId)
+        //console.log(this.state.adminId)
     }
    
     async initUserTable (param) {
         const res = await reqListAccount(param);
-        console.log(res)
+        //console.log(res)
         const {list} = res.data;
         const {totalRows} = res.data.pageInfo
         this.setState({userDataSource:list,total:totalRows})
@@ -99,7 +99,7 @@ export default class User extends Component {
           }
     }
     onChange = (e) => {
-        console.log(e)
+        //console.log(e)
         if(e == ""){
             this.setState({
                 role: null
@@ -124,15 +124,15 @@ export default class User extends Component {
             accountId:userCode,
             excel:null
         }
-        console.log(param)
+        //console.log(param)
         this.initUserTable(param)
     }
 
 
      //?监控角色级联选择
     handleChange = (value) => {
-        console.log(value.length-1)
-        console.log(value[value.length-1])
+        //console.log(value.length-1)
+        //console.log(value[value.length-1])
         if(value == []){
             this.setState({
                 newRole: null
@@ -155,7 +155,7 @@ export default class User extends Component {
     //          accountId:Number(e),
     //          adminId:Number(storageUtils.getUser().adminId)
     //     }
-    //     console.log(param)
+    //     //console.log(param)
     //     const res = await reqDeleteAccountById(param);
     //     if(res.code == 1){
     //         message.success("删除成功")
@@ -167,7 +167,7 @@ export default class User extends Component {
      //?修改角色
      updateUserRole = (e) => {
          const {newRole,adminId,subjectId} = this.state
-         console.log(e)
+         //console.log(e)
          let param = {
             accountId:e,
             newRole,
@@ -180,10 +180,10 @@ export default class User extends Component {
                  message.success("成功修改角色！")
                  this.userSearch()
              }
-             console.log(res)
+             //console.log(res)
          })
          .catch(err=>{
-             console.log(err)
+             //console.log(err)
 
          })
      }
@@ -200,7 +200,7 @@ export default class User extends Component {
             data: formData
           })
           .then(res=>{
-            console.log(res)
+            //console.log(res)
             if(res.data.code == 1){
               message.success("成功导入！")
             }else{
@@ -210,15 +210,15 @@ export default class User extends Component {
      }
    
         beforeUpload =(file, fileList) =>{
-            // console.log("上传前")
-            // console.log(file)
+            // //console.log("上传前")
+            // //console.log(file)
             this.setState({excel:file,
             status:1})
           }
           handleChange(info) {
                
             if (info.file.status !== 'uploading') {
-              console.log(info.file, info.fileList);
+              //console.log(info.file, info.fileList);
             }
             if (info.file.status === 'done') {
               message.success(`${info.file.name} file uploaded successfully`);

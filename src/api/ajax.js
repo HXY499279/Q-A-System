@@ -35,7 +35,7 @@ export default function ajax(url, params={}, type="GET") {
             resolve(response.data)
         }).catch(error => {
             message.error(error.message);
-            console.log(error);
+            // console.log(error);
         })
         
     })

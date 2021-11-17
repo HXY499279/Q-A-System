@@ -22,7 +22,7 @@ class Header extends Component {
           //?保存用户登录信息到内存中
             reqLoginInfo()
             .then(res=>{
-            console.log(res)
+            // console.log(res)
             memoryUtils.user = res.data;
 
             //?保存用户登录信息到localstorage
@@ -38,7 +38,7 @@ class Header extends Component {
        
     }
     componentDidMount = () => {
-        console.log(this.state.flag)
+        // console.log(this.state.flag)
     }
     confirmOut = ()=> {
 

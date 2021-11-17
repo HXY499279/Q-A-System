@@ -38,7 +38,7 @@ export default class Subject extends Component {
       }
       reqGetAllCollege()
       .then(res=>{
-        console.log(res)
+        //console.log(res)
         this.setState({
           collegeData:res.data
         })
@@ -54,7 +54,7 @@ export default class Subject extends Component {
 
   //?监听查询条件变化
   subjectName = (e) => {
-    console.log(e)
+    //console.log(e)
     if(e.target.value == ''){
       this.setState({
         subjectName: null
@@ -107,7 +107,7 @@ export default class Subject extends Component {
 
    }
    changeEdit = () => {
-    //  console.log("我点击了OK")
+    //  //console.log("我点击了OK")
     let formData = new FormData();
     formData.append('subjectId',subjectIdStore.getState());
     formData.append('icon',subjectIconStore.getState());
@@ -123,7 +123,7 @@ export default class Subject extends Component {
       data: formData
     })
     .then(res=>{
-      console.log(res)
+      //console.log(res)
       if(res.data.code == 1){
         message.success("成功修改学科！")
         this.searchSubject()
@@ -140,13 +140,13 @@ export default class Subject extends Component {
 
     //清空
     // clearAll = () => {
-    //   console.log("清空")
+    //   //console.log("清空")
     //   this.setState({
     //     subjectName:null,
     //     college:null
     //   })
-    //   console.log(this.state.subjectName);
-    //   console.log(this.state.college)
+    //   //console.log(this.state.subjectName);
+    //   //console.log(this.state.college)
     // }
     //?添加学科
     showAddSubject = () => {
@@ -155,8 +155,8 @@ export default class Subject extends Component {
      }
      addEdit = () => {
 
-      console.log("add")
-      console.log(subjectIconStore.getState())
+      //console.log("add")
+      //console.log(subjectIconStore.getState())
       let formData = new FormData();
       formData.append('icon',subjectIconStore.getState());
       formData.append('subjectName', subjectNameStore.getState())
@@ -171,7 +171,7 @@ export default class Subject extends Component {
         data: formData
       })
       .then(res=>{
-        console.log(res)
+        //console.log(res)
         if(res.data.code == 1){
           message.success("成功添加学科！")
           this.searchSubject()
@@ -187,7 +187,7 @@ export default class Subject extends Component {
 
       //?删除学科
       deleteSubject = (e) => {
-        console.log(e)
+        //console.log(e)
         let param = {
           subjectId:e,
           adminId:this.state.adminId

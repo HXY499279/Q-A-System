@@ -14,7 +14,7 @@ export default class FeedbackContent extends Component {
     }
     async componentDidMount () {
         const res = await reqGetFeedback({feedbackId:Number(feedbackIdStore.getState())})
-        console.log(res)
+        // console.log(res)
         const {feedbackContent,
                 feedbackImage,
                 feedbackRole,

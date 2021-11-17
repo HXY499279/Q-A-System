@@ -19,9 +19,9 @@ export default class ProfileMsg extends Component {
 
     }
     async componentDidMount () {
-        console.log(stuIdStore.getState())
+        //console.log(stuIdStore.getState())
         const res = await reqGetAccountById({accountId:stuIdStore.getState()});
-        console.log(res)
+        //console.log(res)
         if(res.code == 1){
             let {imgPath,userName,role,introduce,questionCount,answerCount,agreeCount,collectionCount,solveCount,score} = res.data;
             introduce = introduce.replace(/&nbsp;/ig, ' ');

@@ -31,13 +31,13 @@ export default class Rule extends Component {
     initRule = () => {
         reqAllRules()
         .then(res=>{
-            console.log(res.data)
+            //console.log(res.data)
             this.setState({ruleArr:res.data})
         })
     }
       //?点击修改
       showChange = (e)=> {
-        console.log(e)
+        //console.log(e)
         this.setState({
             scoreIsModalVisible:true,
             preRule:e.ruleInfo,
@@ -64,7 +64,7 @@ export default class Rule extends Component {
             }else{
                 message.error("修改失败")
             }
-            console.log(res)
+            //console.log(res)
         })
         this.setState({scoreIsModalVisible:false})
         
@@ -74,11 +74,11 @@ export default class Rule extends Component {
         this.setState({scoreIsModalVisible:false})
     }
     ScoreChange = e => {
-        console.log(e.target.value);
+        //console.log(e.target.value);
         this.setState({newScore:e.target.value})
     }
     ruleChange = e => {
-        console.log(e.target.value);
+        //console.log(e.target.value);
         this.setState({ruleInfo:e.target.value})
     }
     render() {

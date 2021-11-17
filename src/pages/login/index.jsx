@@ -135,7 +135,7 @@ export default class Login extends Component {
         
             const result = await reqLogin(param);
             
-            console.log(result);
+            // console.log(result);
             const {code} = result;
             if(code == 1){
                 const user = result.data;

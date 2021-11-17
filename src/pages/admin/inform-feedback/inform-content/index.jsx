@@ -21,7 +21,7 @@ export default class InformContent extends Component {
         const {content,imgPath,reportAccountName,reportTime,reportedAccountName} = res.data
         const {describes,publishTime} = res.data.thing
         const imgPath2 = res.data.thing.imgPath
-        console.log(imgPath)
+        // console.log(imgPath)
         this.setState({
             content,
             imgPath,

@@ -61,21 +61,21 @@ export default class Question extends Component {
      initQuestionTable = (param) => {
         reqListQuestion(param)
         .then(res=>{
-            console.log(res)
+            //console.log(res)
             let list =res.data? res.data.list : [];
             let totalRows =res.data? res.data.pageInfo.totalRows : 0
             this.setState({questionDataSource:list,total:totalRows})
         })
         // const res = await reqListQuestion(param);
-        // console.log(res)
+        // //console.log(res)
         
        
     }
 
       //?监听输入框的值
       titleSearch = (e) => {
-        //   console.log(e.target.value)
-        //   console.log(e)
+        //   //console.log(e.target.value)
+        //   //console.log(e)
           if(e.target.value == ""){
               this.setState({
                 title: null
@@ -133,7 +133,7 @@ export default class Question extends Component {
                 state:Number(value)
             })
         }  
-        console.log(`selected ${value}`);
+        //console.log(`selected ${value}`);
        
       }
 
@@ -148,7 +148,7 @@ export default class Question extends Component {
                 hide:Number(value)
             })
         }  
-        console.log(`selected ${value}`);
+        //console.log(`selected ${value}`);
       }
     //?设置时间选择器类型
       setType = (e) => {
@@ -159,7 +159,7 @@ export default class Question extends Component {
     }
     //? 时间选择器回调函数
     onChange = (date, dateStrings) => {
-        console.log(dateStrings)
+        //console.log(dateStrings)
         if(dateStrings == '') {
             this.setState({
                 time:null
@@ -189,23 +189,23 @@ export default class Question extends Component {
         }
         reqListQuestion(param)
         .then(res=>{
-            console.log(res)
+            //console.log(res)
             const {list} = res.data;
             const {totalRows} = res.data.pageInfo
             this.setState({questionDataSource:list,total:totalRows})
         })
         .catch(err=>{
-            console.log(err)
+            //console.log(err)
         })
     }
     
     //?点击提问者
     showProfile = (e)=> {
-        console.log("我点击了提问者")
+        //console.log("我点击了提问者")
         //存储提问者学号
-        console.log(e.target.innerHTML)
+        //console.log(e.target.innerHTML)
         stuIdStore.dispatch(stuId(e.target.innerHTML))
-        console.log(stuIdStore.getState())
+        //console.log(stuIdStore.getState())
         this.setState({profileIsModalVisible:true})
        
     }
@@ -223,7 +223,7 @@ export default class Question extends Component {
         //存储问题id
         qID.dispatch(questionId(e))
         this.setState({editIsModalVisible:true})
-        // console.log('我点击了修改问题')
+        // //console.log('我点击了修改问题')
     }
     //?确认修改问题
     handleEdit = (e) => {
@@ -246,7 +246,7 @@ export default class Question extends Component {
             data: formData
           })
           .then(res=>{
-            console.log(res)
+            //console.log(res)
             if(res.data.code == 1){
                 message.success('修改问题成功！');
                 this.setState({editIsModalVisible:false})
@@ -261,7 +261,7 @@ export default class Question extends Component {
     //     }
     //     reqUpdateQuestion(param)
     //     .then(res=>{
-    //         console.log(res)
+    //         //console.log(res)
     //         const {code} = res;
     //         if(1 == code) {
                 // message.success('修改问题成功！');
@@ -269,7 +269,7 @@ export default class Question extends Component {
     //         }
     //     })
     //     .catch(err=>{
-    //         console.log(err)
+    //         //console.log(err)
     //     })
     }
     cancelEdit = (e) => {
@@ -280,14 +280,14 @@ export default class Question extends Component {
     goQuestionDetail = (e) => {
          //?保存用户登录信息到localstorage
         storageUtils.saveQuestionId(e)
-        console.log(e)
+        //console.log(e)
         qID.dispatch(questionId(e))
 
     }
 
     //?实现分页
     handleChangeQustion = (value) =>{
-        console.log(value)
+        //console.log(value)
         const {title,subjectName,college,questionAccountId,state,time,answerAccountName,hide} = this.state;
         let param = {
             currentPage:value.current,
@@ -311,7 +311,7 @@ export default class Question extends Component {
             adminId:this.state.adminId
        }
        const res = await reqDisapperQuestion(param);
-       console.log(res)
+       //console.log(res)
        message.success("隐藏成功")
        let param1 = {
         currentPage:1,

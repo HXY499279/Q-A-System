@@ -6,11 +6,11 @@ const { RangePicker } = DatePicker;
 
 export default class AdminTopbar extends Component {
     onChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+        // console.log('Selected Time: ', value);
+        // console.log('Formatted Selected Time: ', dateString);
     }
     onOk = (value) => {
-        console.log('onOk: ', value);
+        // console.log('onOk: ', value);
     }
 
     render() {

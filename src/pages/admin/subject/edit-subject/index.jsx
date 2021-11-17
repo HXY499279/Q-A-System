@@ -15,8 +15,8 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 function getBase64(file) {
-  console.log('进入64')
-  console.log(file)
+  //console.log('进入64')
+  //console.log(file)
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -55,7 +55,7 @@ export default class EditSubject extends Component {
          if(this.props.type == "change"){
            reqGetSubjectById({subjectId:Number(subjectIdStore.getState())})
            .then(res=>{
-             console.log(res)
+             //console.log(res)
              const college1 = res.data.college;
              const subjectInfo1 = res.data.subjectInfo;
              const subjectName1 = res.data.subjectName;
@@ -63,12 +63,12 @@ export default class EditSubject extends Component {
              let {iconPath} = res.data
              iconPath = 'https://xscqa.cqupt.edu.cn/question/img/' + iconPath;
              const fileList = [{url:iconPath}]
-             // console.log(college)
+             // //console.log(college)
              this.setState({
                college1,iconPath,note,subjectInfo1,subjectName1,fileList
              })
-             console.log("这下有了")
-             console.log(this.state.college1)
+             //console.log("这下有了")
+             //console.log(this.state.college1)
              collegeStore.dispatch(college(this.state.college1));
             subjectNameStore.dispatch(subjectName(this.state.subjectName1));
             subjectInfoStore.dispatch(subjectInfo(this.state.subjectInfo1));
@@ -77,7 +77,7 @@ export default class EditSubject extends Component {
          }
          reqGetAllCollege()
          .then(res=>{
-           console.log(res)
+           //console.log(res)
            this.setState({
              collegeData:res.data
            })
@@ -86,7 +86,7 @@ export default class EditSubject extends Component {
 
       //?监听学院变化
       handleCollegeChange = (e) => {
-        console.log(e)
+        //console.log(e)
         if(e == ''){
           collegeStore.dispatch(college(null))
                 this.setState({
@@ -143,8 +143,8 @@ export default class EditSubject extends Component {
 
 
       beforeUpload (file, fileList) {
-        console.log("上传前")
-        console.log(file)
+        //console.log("上传前")
+        //console.log(file)
         subjectIconStore.dispatch(subjectIcon(file))
       }
     handleCancel = () => this.setState({ previewVisible: false });
