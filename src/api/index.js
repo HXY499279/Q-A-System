@@ -2,8 +2,8 @@
 
 
 import ajax from './ajax'
-const url = 'https://xscqa.cqupt.edu.cn/question'
-// const url =''
+// const url = 'https://xscqa.cqupt.edu.cn/question'
+const url =''
 
 
 // "proxy": "https://xscqa.cqupt.edu.cn/question/"
